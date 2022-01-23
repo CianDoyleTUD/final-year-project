@@ -1,0 +1,33 @@
+.App {
+  text-align: center;
+}
+
+.NavBar ul{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  list-style-type: none;
+}
+
+.NavBar a {
+  text-decoration: none;
+}
+
+.Block {
+  margin-left: 10vw;
+  margin-right: 10vw;
+  justify-content: center;
+  background-color: darkgray;
+}
+
+.BlockTable {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+
+.BlockTable {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
