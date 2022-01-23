@@ -9,25 +9,39 @@
   list-style-type: none;
 }
 
-.NavBar a {
+.NavBar a, a:visited {
   text-decoration: none;
+  color:black;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: x-large;
 }
 
 .Block {
-  margin-left: 10vw;
-  margin-right: 10vw;
+  margin-left: 20vw;
+  margin-right: 20vw;
   justify-content: center;
-  background-color: darkgray;
+  border: thin solid black;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: large;
+}
+
+.BlockHeader > h1 {
+  font-weight: normal;
 }
 
 .BlockTable {
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
+  padding: 2em;
 }
 
-.BlockTable {
+.BlockTable > tr {
   display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
+  flex-direction: row;
+  justify-content: space-between;
+  list-style-type: none;
+  border-bottom: thin solid black;
+  padding: 1em;
 }
+

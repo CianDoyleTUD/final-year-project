@@ -1,46 +1,48 @@
-function Block(props) {
+function Block({ blockdata }) {
     return (
+        blockdata.map(block =>
         <div className="Block">
             <div className="BlockHeader">
-                <h1>Block {props.height}</h1>
+                <h1>Block {block.height}</h1>
             </div>
             <div className="BlockInfo">
                 <table className="BlockTable">
                     <tr>
                         <td>Hash</td>
-                        <td>{props.blockhash}</td>
+                        <td>{block.blockhash}</td>
                     </tr>
                     <tr>
                         <td>Timestamp</td>
-                        <td>{props.timestamp}</td>
+                        <td>{block.timestamp}</td>
                     </tr>
                     <tr>
                         <td>Height</td>
-                        <td>{props.height}</td>
+                        <td>{block.height}</td>
                     </tr>
                     <tr>
                         <td>Transaction count</td>
-                        <td>{props.txcount}</td>
+                        <td>{block.txcount}</td>
                     </tr>
                     <tr>
                         <td>Difficulty</td>
-                        <td>{props.difficulty}</td>
+                        <td>{block.difficulty}</td>
                     </tr>
                     <tr>
                         <td>Version</td>
-                        <td>{props.version}</td>
+                        <td>{block.version}</td>
                     </tr>
                     <tr>
                         <td>Bits</td>
-                        <td>{props.bits}</td>
+                        <td>{block.bits}</td>
                     </tr>
                     <tr>
                         <td>Size</td>
-                        <td>{props.size}</td>
+                        <td>{block.size} bytes</td>
                     </tr>
                 </table>
             </div>
         </div>
+        )
     );
 }
 export default Block;
