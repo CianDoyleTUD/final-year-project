@@ -2,6 +2,8 @@ import Block from './Block.js';
 import './App.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import NavBar from './NavBar.js';
+import SearchBar from './SearchBar.js';
+import BlockPage from './BlockPage.js';
 
 const sampleData = [
   { height: '0', 
@@ -18,8 +20,10 @@ function App() {
   return (
     <div className="App">
     <NavBar/>
+    <SearchBar/>
       <Routes>
         <Route path="/" element={<Block blockdata={sampleData}/>}/>
+        <Route path="/tx/:tx" element={<BlockPage/>}/>
       </Routes>
     </div>
     
