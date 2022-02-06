@@ -1,50 +1,48 @@
 function Block({ blockdata }) {
     return (
-        blockdata.map(block =>
         <div className="Block">
             <div className="BlockHeader">
-                <h1>Block {block.height}</h1>
+                <h1>Block {blockdata.height}</h1>
             </div>
             <div className="BlockInfo">
                 <table className="BlockTable">
                    <tbody>
                         <tr>
                             <td>Hash</td>
-                            <td>{block.blockhash}</td>
+                            <td>{blockdata.blockhash}</td>
                         </tr>
                         <tr>
                             <td>Timestamp</td>
-                            <td>{block.timestamp}</td>
+                            <td>{blockdata.timestamp}</td>
                         </tr>
                         <tr>
                             <td>Height</td>
-                            <td>{block.height}</td>
+                            <td>{blockdata.height}</td>
                         </tr>
                         <tr>
                             <td>Transaction count</td>
-                            <td>{block.txcount}</td>
+                            <td>{blockdata.txcount}</td>
                         </tr>
                         <tr>
                             <td>Difficulty</td>
-                            <td>{block.difficulty}</td>
+                            <td>{blockdata.difficulty}</td>
                         </tr>
                         <tr>
                             <td>Version</td>
-                            <td>{block.version}</td>
+                            <td>{blockdata.version}</td>
                         </tr>
                         <tr>
                             <td>Bits</td>
-                            <td>{block.bits}</td>
+                            <td>{blockdata.bits}</td>
                         </tr>
                         <tr>
                             <td>Size</td>
-                            <td>{block.size} bytes</td>
+                            <td>{blockdata.size} bytes</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
-        )
-    );
-}
+    )
+};
 export default Block;

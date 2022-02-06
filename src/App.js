@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import NavBar from './NavBar.js';
 import SearchBar from './SearchBar.js';
 import BlockPage from './BlockPage.js';
+import React from 'react';
 
 function App() {
   return (
@@ -14,7 +15,6 @@ function App() {
         <Route path="/tx/:tx" element={<BlockPage/>}/>
       </Routes>
     </div>
-    
   );
 }
 
