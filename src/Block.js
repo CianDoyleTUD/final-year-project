@@ -9,11 +9,11 @@ function Block({ blockdata }) {
                    <tbody>
                         <tr>
                             <td>Hash</td>
-                            <td>{blockdata.blockhash}</td>
+                            <td>{blockdata.hash}</td>
                         </tr>
                         <tr>
                             <td>Timestamp</td>
-                            <td>{blockdata.timestamp}</td>
+                            <td>{blockdata.time}</td>
                         </tr>
                         <tr>
                             <td>Height</td>
@@ -21,7 +21,7 @@ function Block({ blockdata }) {
                         </tr>
                         <tr>
                             <td>Transaction count</td>
-                            <td>{blockdata.txcount}</td>
+                            <td>{blockdata.ntx}</td>
                         </tr>
                         <tr>
                             <td>Difficulty</td>
@@ -37,7 +37,7 @@ function Block({ blockdata }) {
                         </tr>
                         <tr>
                             <td>Size</td>
-                            <td>{blockdata.size} bytes</td>
+                            <td>{blockdata.blocksize} bytes</td>
                         </tr>
                     </tbody>
                 </table>

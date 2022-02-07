@@ -3,20 +3,17 @@ import React from 'react';
 
 class BlockPage extends React.Component{
 
-    
     constructor(props) {
         super(props);
         this.state = { apiResponse: ""}
     }
     
     componentDidMount() {
-        const win = window.location.pathname;
-        console.log(win);
         this.callBackendAPI()
     }
 
     callBackendAPI() {
-        fetch("http://localhost:3001/api")
+        fetch("http://localhost:3001/api", {queryPath: window.location.pathname})
             .then(res => res.json())
             .then(res => this.setState({ apiResponse: res }));
     };

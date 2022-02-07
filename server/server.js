@@ -9,26 +9,36 @@ const oracledb = require('oracledb');
 oracledb.initOracleClient({ libDir: 'C:\\instantclient_21_3' });
 
 app.get("/api", (req, res) => {
-  getBlockData("000000000000000000068856ddd36a87d9307243b9c34ee4f3744ec980d342d1").then((value) => console.log(value))
-  res.json(
-    {
-      height: '9',
-      blockhash: '000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f', 
-      timestamp: '2022-01-22 18:41',
-      txcount: '1',
-      difficulty: '1.00',
-      version: '2022-01-22 18:41',
-      bits: '486,604,799',
-      size: '285' 
-    }
-  )
+  getBlockData(req.queryPath).then((result) => {  
+    rows = result.rows[0];
+    res.json({
+      hash: rows[0],
+      confirmations: rows[1],
+      strippedsize: rows[2],
+      blocksize: rows[3],
+      weight: rows[4],
+      height: rows[5],
+      version: rows[6],
+      versionHex: rows[7],
+      merkleroot: rows[8],
+      time: rows[9],
+      mediantime: rows[10],
+      nonce: rows[11],
+      bits: rows[12],
+      difficulty: rows[13],
+      chainwork: rows[14],
+      ntx: rows[15],
+      previousblockhash: rows[16],
+      nextblockhash: rows[17],
+    })
+  });
 });
 
 async function getBlockData(blockhash) {
 
   let connection;
   try {
-    connection = await oracledb.getConnection({ user: "ADMIN", password: "Blockchaindbpass1", connectionString: "blockchaindb_high"});
+    connection = await oracledb.getConnection({ user: "ADMIN", password: "", connectionString: "blockchaindb_high"});
     const result = await connection.execute(`SELECT * FROM BLOCKCHAIN.BLOCK WHERE HASH='${blockhash}'`);
     return result;
   } catch (err) {
