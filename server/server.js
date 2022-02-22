@@ -9,7 +9,7 @@ const oracledb = require('oracledb');
 oracledb.initOracleClient({ libDir: 'C:\\instantclient_21_3' });
 
 const { MongoClient } = require("mongodb");
-const uri = "mongodb+srv://admin:admin@blockchaininstance.3ti8e.mongodb.net/test?authSource=admin&readPreference=primary&ssl=true";
+const uri = "";
 const client = new MongoClient(uri);
 
 /*async function checkServerStatus() {
