@@ -12,7 +12,7 @@ function App() {
     <SearchBar/>
       <Routes>
         <Route path="/"/>
-        <Route path="/tx/:tx" element={<BlockPage/>}/>
+        <Route path="/tx/:tx" element={<BlockPage/> }/>
       </Routes>
     </div>
   );

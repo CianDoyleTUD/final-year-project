@@ -52,13 +52,11 @@ form{
   outline: none;
 }
 
-
 .Block {
   text-align: center;
   margin-left: 20vw;
   margin-right: 20vw;
   justify-content: center;
- 
   font-family: 'Courier New', Courier, monospace;
   font-size: large;
 }
@@ -71,6 +69,18 @@ form{
   padding: 2em; 
 }
 
+.TransactionTable {
+  margin-left: 20vw;
+  margin-right: 20vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  padding: 2em; 
+  text-align: center;
+  border: 1px solid grey;
+
+}
+
 .BlockTable > tbody > tr {
   display: flex;
   flex-direction: row;
@@ -78,5 +88,25 @@ form{
   list-style-type: none;
   border-bottom: thin solid black;
   padding: 1em;
+}
+
+.TransactionData {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  border: 1px solid grey;
+}
+
+.TransactionInputs, .TransactionOutputs{
+  width: 25vw;
+  border: 0px solid grey;
+}
+
+.TransactionValuePositive {
+  color:green
+}
+
+.TransactionValueNegative {
+  color:red
 }
 

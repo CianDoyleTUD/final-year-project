@@ -13,7 +13,9 @@ class BlockPage extends React.Component{
     }
 
     callBackendAPI() {
-        fetch("http://localhost:3001/api", {queryPath: window.location.pathname})
+        let query =  window.location.pathname.substring(4);
+        console.log(query) 
+        fetch("http://localhost:3001/api/" + query)
             .then(res => res.json())
             .then(res => this.setState({ apiResponse: res }));
     };

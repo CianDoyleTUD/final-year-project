@@ -8,49 +8,66 @@ app.use(cors());
 const oracledb = require('oracledb');
 oracledb.initOracleClient({ libDir: 'C:\\instantclient_21_3' });
 
-app.get("/api", (req, res) => {
-  getBlockData(req.queryPath).then((result) => {  
-    rows = result.rows[0];
-    res.json({
-      hash: rows[0],
-      confirmations: rows[1],
-      strippedsize: rows[2],
-      blocksize: rows[3],
-      weight: rows[4],
-      height: rows[5],
-      version: rows[6],
-      versionHex: rows[7],
-      merkleroot: rows[8],
-      time: rows[9],
-      mediantime: rows[10],
-      nonce: rows[11],
-      bits: rows[12],
-      difficulty: rows[13],
-      chainwork: rows[14],
-      ntx: rows[15],
-      previousblockhash: rows[16],
-      nextblockhash: rows[17],
-    })
+const { MongoClient } = require("mongodb");
+const uri = "mongodb+srv://admin:admin@blockchaininstance.3ti8e.mongodb.net/test?authSource=admin&readPreference=primary&ssl=true";
+const client = new MongoClient(uri);
+
+/*async function checkServerStatus() {
+  try {
+    await client.connect();
+    await client.db("blockchain").command({ ping: 1 });
+  } finally {
+    console.log("Connected successfully to server");
+    await client.close();
+  }
+}
+checkServerStatus().catch(console.dir);
+*/
+app.get("/api/:id", (req, res) => {
+
+  var id = req.params.id;
+
+  if (isNaN(id)){
+    if((!id.startsWith('0'))){
+      console.log("Blocked invalid request: " + id)
+      return res.sendStatus(204);
+    }
+  } 
+
+  console.log("Query called -> " + id);
+
+  let identifier;
+
+  if(id.startsWith('0x') || id.startsWith('00')) {
+    identifier = 'hash'
+  }
+  else {
+    identifier = 'height'
+  }
+  getBlockData(id, identifier).then((result) => {  
+
+    if (!result) {
+      console.log("No results found for query");
+      return res.sendStatus(404);
+    } 
+    else {
+      console.log("Returned result");
+      res.json(result)
+    }
+
   });
 });
 
-async function getBlockData(blockhash) {
-
-  let connection;
+async function getBlockData(query, identifier) {
+  let result;
   try {
-    connection = await oracledb.getConnection({ user: "ADMIN", password: "", connectionString: "blockchaindb_high"});
-    const result = await connection.execute(`SELECT * FROM BLOCKCHAIN.BLOCK WHERE HASH='${blockhash}'`);
-    return result;
-  } catch (err) {
-    console.error(err);
+    await client.connect();
+    let blockchaindb = await client.db("blockchain")
+    console.log("Looking for " + identifier + " of " + query);
+    result = await blockchaindb.collection("embedded_txs").findOne({[identifier]:parseInt(query)});
   } finally {
-    if (connection) {
-      try {
-        await connection.close();
-      } catch (err) {
-        console.error(err);
-      }
-    }
+    console.log(result)
+    return (result);
   }
 }
 
