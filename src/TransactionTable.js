@@ -5,6 +5,7 @@ class TransactionTable extends React.Component {
 
     constructor(props) {
         super(props);
+        this.tooManyOutputs = false;
     }
     
     render() {
@@ -13,7 +14,18 @@ class TransactionTable extends React.Component {
         }
         return (
             <div className="TransactionTable">
-                {this.props.data.map((transaction, i) => <Transaction key={i} data={transaction}/>)}
+                <table>
+                    {this.props.data.map((transaction, i) => 
+                    {
+                        if(i < 5)
+                            return <Transaction key={i} data={transaction}/>
+                        if(this.tooManyOutputs)
+                            return
+                        else
+                            this.tooManyOutputs = true;
+                            return <a>View full transaction list</a>
+                    })}
+                </table>
             </div>
         )
     };

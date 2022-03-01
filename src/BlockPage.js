@@ -5,17 +5,17 @@ class BlockPage extends React.Component{
 
     constructor(props) {
         super(props);
-        this.state = { apiResponse: ""}
+        this.state = { apiResponse: "" }
     }
     
     componentDidMount() {
-        this.callBackendAPI()
+        this.fetchBlockData()
     }
 
-    callBackendAPI() {
+    fetchBlockData() {
         let query =  window.location.pathname.substring(4);
         console.log(query) 
-        fetch("http://localhost:3001/api/" + query)
+        fetch("http://localhost:3001/api/tx/" + query)
             .then(res => res.json())
             .then(res => this.setState({ apiResponse: res }));
     };

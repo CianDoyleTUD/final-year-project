@@ -14,7 +14,7 @@ class Transaction extends React.Component {
             return (
                 <div className="Transaction">
                     <div className="TransactionID">
-                        <h1>Transaction {this.props.data.txid}</h1>
+                        <h4>{this.props.data.txid}</h4>
                     </div>
                     <div className="TransactionData">
                         <div className="TransactionInputs">
@@ -33,7 +33,7 @@ class Transaction extends React.Component {
             return (
                 <div className="Transaction">
                     <div className="TransactionID">
-                        <h1>Transaction {this.props.data.txid}</h1>
+                        <h4>{this.props.data.txid}</h4>
                     </div>
                     <div className="TransactionData">
                         
