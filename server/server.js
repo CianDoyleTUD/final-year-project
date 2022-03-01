@@ -9,11 +9,7 @@ const oracledb = require('oracledb');
 oracledb.initOracleClient({ libDir: 'C:\\instantclient_21_3' });
 
 const { MongoClient } = require("mongodb");
-<<<<<<< HEAD
 const uri = "mongodb://localhost:27017/?readPreference=primary&appname=MongoDB%20Compass&directConnection=true&ssl=false";
-=======
-const uri = "";
->>>>>>> 4ea1b514de5577b2d840725f711d0a4101bb15db
 const client = new MongoClient(uri);
 
 /*async function checkServerStatus() {
@@ -165,7 +161,6 @@ async function getLatestBlocks() {
 
 app.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
-<<<<<<< HEAD
   // getLatestBlocks().then((result) => {  
   //   if (!result) {
   //     console.log("No results found for blocks");
@@ -184,6 +179,3 @@ app.listen(PORT, () => {
   //   }
   // });
 });
-=======
-});
->>>>>>> 4ea1b514de5577b2d840725f711d0a4101bb15db
