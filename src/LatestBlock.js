@@ -4,6 +4,28 @@ class LatestBlock extends React.Component {
 
     constructor(props) {
         super(props);
+        this.state = { formattedTime: "" }
+    }
+
+    // Calculates how long ago blocks were mined
+    calculateBlockTimes() {
+        let timeDifference = (Date.now() / 1000) - this.props.data.time;
+        if(timeDifference < 60){
+            this.setState({formattedTime: timeDifference + " seconds ago"})
+        }
+        else if(timeDifference < 3600){
+            this.setState({formattedTime: (timeDifference / 60) + " minutes ago"})
+        }
+        else if(timeDifference < 86400) {
+            this.setState({formattedTime: (timeDifference / 3600) + " hours ago"})
+        }
+        else {
+            this.setState({formattedTime: Math.floor(timeDifference / 86400) + " days ago"})
+        }
+    }
+
+    componentDidMount() {
+        this.calculateBlockTimes();
     }
     
     render() {
@@ -11,9 +33,17 @@ class LatestBlock extends React.Component {
             return <p>Loading...</p>
         }
         return (
-            <div className="LatestBlockInfo">
-                <><a href={ 'tx/' + this.props.data._id }>{this.props.data._id}</a><span>{this.props.data.height}</span><span>{this.props.data.time}</span></>
-            </div>
+            <tr className="LatestBlockTableRow">
+                <td>
+                    <a href={ 'tx/' + this.props.data._id }>{this.props.data._id}</a>
+                </td>
+                <td>
+                    <span>{this.props.data.height}</span>
+                </td>
+                <td>
+                    <span>{this.state.formattedTime}</span>
+                </td>
+            </tr>
         )
     }
 };  

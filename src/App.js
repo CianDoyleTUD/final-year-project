@@ -10,8 +10,6 @@ import AddressPage from './AddressPage';
 function App() {
   return (
     <div className="App">
-    <NavBar/>
-    <SearchBar/>
       <Routes>
         <Route path="/" element={<HomePage/> }/>
         <Route path="/tx/:tx" element={<BlockPage/> }/>

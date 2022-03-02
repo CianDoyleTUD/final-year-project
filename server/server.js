@@ -12,7 +12,7 @@ const { MongoClient } = require("mongodb");
 const uri = "mongodb://localhost:27017/?readPreference=primary&appname=MongoDB%20Compass&directConnection=true&ssl=false";
 const client = new MongoClient(uri);
 
-/*async function checkServerStatus() {
+async function checkServerStatus() {
   try {
     await client.connect();
     await client.db("blockchain").command({ ping: 1 });
@@ -22,7 +22,7 @@ const client = new MongoClient(uri);
   }
 }
 checkServerStatus().catch(console.dir);
-*/
+
 
 app.get("/api/latest", (req, res) => {
 
@@ -97,8 +97,6 @@ app.get("/api/address/:id", (req, res) => {
   }
 });
 
-//.project({ _id: 0, "tx.$": 1 }); .project({"tx.$": 1})
-
 async function getAddressTransactions(address) {
   let result_to;
   let result_from;
@@ -161,21 +159,4 @@ async function getLatestBlocks() {
 
 app.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
-  // getLatestBlocks().then((result) => {  
-  //   if (!result) {
-  //     console.log("No results found for blocks");
-  //   } 
-  //   else {
-  //     console.log(result);
-  //   }
-  // });
-
-  // getAddressTransactions("1517uEBW1DZCzYotyvhps2bFXTqt5WDSPT").then((result) => {  
-  //   if (!result) {
-  //     console.log("No results found for wallet");
-  //   } 
-  //   else {
-  //     console.log(result);
-  //   }
-  // });
 });

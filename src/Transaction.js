@@ -39,11 +39,11 @@ class Transaction extends React.Component {
                         
                         <div className="TransactionInputs">
                             <p>Inputs</p>
-                            {this.props.data.inputs.map((tx,i) => <><span key={i}>{tx.from}</span><span className="TransactionValueNegative"> (-{tx.value} BTC)</span><br/></>)}
+                            {this.props.data.inputs.map((tx,i) => <><a href={'../address/' + tx.from}>{tx.from}</a><span className="TransactionValueNegative"> (-{tx.value} BTC)</span><br/></>)}
                         </div>
                         <div className="TransactionOutputs">
                             <p>Outputs</p>
-                            {this.props.data.outputs.map((tx,i) => <><span key={i}>{tx.to}</span><span className="TransactionValuePositive"> (+{tx.value} BTC)</span><br/></>)}
+                            {this.props.data.outputs.map((tx,i) => <><a href={'../address/' + tx.to}>{tx.to}</a><span className="TransactionValuePositive"> (+{tx.value} BTC)</span><br/></>)}
                         </div>  
                     </div>
                 </div>

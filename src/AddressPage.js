@@ -1,5 +1,6 @@
 import React from 'react';
 import AddressTransaction from './AddressTransaction';
+import NavBar from './NavBar.js';
 
 class AddressPage extends React.Component{
 
@@ -27,14 +28,12 @@ class AddressPage extends React.Component{
         for (var i = 0; i < txin_count; i++) {
             var value = this.state.apiResponse["received"][i].tx[0].outputs[0].value;
             total_received += value;
-            console.log(value);
         }
         this.setState({received: total_received})
 
         for (var i = 0; i < txout_count; i++) {
             var value = this.state.apiResponse["spent"][i].tx[0].inputs[0].value;
             total_spent += value;
-            console.log(value);
         }
         this.setState({spent: total_spent})
 
@@ -42,7 +41,7 @@ class AddressPage extends React.Component{
     }
 
     fetchAddressData() {
-        let query =  window.location.pathname.substring(9);
+        let query = window.location.pathname.substring(9);
         this.setState({address: query})
         fetch("http://localhost:3001/api/address/" + query)
             .then(res => res.json())
@@ -57,7 +56,7 @@ class AddressPage extends React.Component{
             return <p>Loading...</p>
         }
         return (
-            <div className="AddressPage">
+            <><NavBar /><div className="AddressPage">
                 <table>
                     <tbody className="AddressInfo">
                         <tr><td>Address</td><td>{this.state.address}</td></tr>
@@ -68,27 +67,25 @@ class AddressPage extends React.Component{
                     </tbody>
                 </table>
                 <div className="TransactionTable">
-                <table>
-                    <AddressTransaction data={{type: "Received"}}></AddressTransaction>
-                    {this.state.apiResponse["spent"].map((transaction, i) => 
-                    {
-                        return (
-                            <><p key={i}>{transaction.tx[0].txid}</p>
-                            <p>{transaction.tx[0].outputs[0].to}</p>
-                            <p className='TransactionValueNegative'>{transaction.tx[0].inputs[0].value}</p></>
-                        )
-                    })}
-                    {this.state.apiResponse["received"].map((transaction, i) => 
-                    {
-                        return (
-                            <><p key={i}>{transaction.tx[0].txid}</p>
-                            <p>{transaction.tx[0].outputs[0].to}</p>
-                            <p className='TransactionValuePositive'>{transaction.tx[0].outputs[0].value}</p></>
-                        )
-                    })}
-                </table>
-            </div>
-            </div>
+                    <table>
+                        <AddressTransaction data={{ type: "Received", amount: 0.045, timestamp: 1646185387000 }}></AddressTransaction>
+                        {this.state.apiResponse["spent"].map((transaction, i) => {
+                            return (
+                                <><p key={i}>{transaction.tx[0].txid}</p>
+                                    <p>{transaction.tx[0].outputs[0].to}</p>
+                                    <p className='TransactionValueNegative'>{transaction.tx[0].inputs[0].value}</p></>
+                            );
+                        })}
+                        {this.state.apiResponse["received"].map((transaction, i) => {
+                            return (
+                                <><p key={i}>{transaction.tx[0].txid}</p>
+                                    <p>{transaction.tx[0].outputs[0].to}</p>
+                                    <p className='TransactionValuePositive'>{transaction.tx[0].outputs[0].value}</p></>
+                            );
+                        })}
+                    </table>
+                </div>
+            </div></>
         );
     }
 }

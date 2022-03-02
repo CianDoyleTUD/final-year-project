@@ -1,6 +1,9 @@
 import React from 'react';
 import LatestBlock from "./LatestBlock";
 import LatestTransaction from "./LatestTransaction";
+import NavBar from './NavBar.js';
+import SearchBar from './SearchBar.js';
+import logo from './btc.png';
 
 class HomePage extends React.Component{
 
@@ -22,16 +25,30 @@ class HomePage extends React.Component{
     render() {
         console.log(this.state.apiResponse);
         return (
+            <>
             <div className="HomePage">
+                <NavBar/>
+                <img src={logo}></img>
+                <SearchBar/>
                 <div className='Latest'>
                     <div className="LatestBlocks">
-                        {this.state.apiResponse.map((transaction, i) => <LatestBlock data ={transaction}/>)}
+                        <table style={{width: "100%"}}className="LatestBlockTable">
+                            <thead>
+                                <th style={{width: "60%"}}>Block hash</th>
+                                <th style={{width: "20%"}}>Block height</th>
+                                <th style={{width: "20%"}}>Mined</th>
+                            </thead>
+                            <tbody>
+                                {this.state.apiResponse.map((transaction, i) => <LatestBlock key={i} data={transaction}/>)}
+                            </tbody>
+                        </table>
                     </div>
                     <div className="LatestTransactions">
-                        {this.state.apiResponse.map((transaction, i) => <LatestTransaction data ={transaction}/>)}
+                        {this.state.apiResponse.map((transaction, i) => <LatestTransaction key={i} data={transaction} />)}
                     </div>
                 </div>
             </div>
+            </>
         );
     }
 }
