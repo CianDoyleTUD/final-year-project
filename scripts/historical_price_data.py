@@ -20,7 +20,7 @@ mongo_connection_string = config['MONGO_URL']
 
 mongo_client = pymongo.MongoClient(mongo_connection_string)
 db = mongo_client["blockchain"]
-collection = db["temp"]
+collection = db["historical_price_data"]
 
 def fetch_price_data(from_timestamp: int, limit=2000):
     url = 'https://min-api.cryptocompare.com/data/v2/histoday?fsym=BTC&tsym=USD&toTs=' + str(from_timestamp) + '&limit=' + str(limit) + '&api_key=' + api_key
