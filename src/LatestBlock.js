@@ -10,6 +10,7 @@ class LatestBlock extends React.Component {
     // Calculates how long ago blocks were mined
     calculateBlockTimes() {
         let timeDifference = (Date.now() / 1000) - this.props.data.time;
+        console.log((this.props.data.time) + " and now: " + (Date.now() / 1000))
         if(timeDifference < 60){
             this.setState({formattedTime: timeDifference + " seconds ago"})
         }

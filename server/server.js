@@ -5,11 +5,8 @@ const app = express();
 const cors = require("cors");
 app.use(cors());
 
-const oracledb = require('oracledb');
-oracledb.initOracleClient({ libDir: 'C:\\instantclient_21_3' });
-
 const { MongoClient } = require("mongodb");
-const uri = "mongodb://localhost:27017/?readPreference=primary&appname=MongoDB%20Compass&directConnection=true&ssl=false";
+const uri = "mongodb://localhost:27017/";
 const client = new MongoClient(uri);
 
 async function checkServerStatus() {
@@ -22,7 +19,6 @@ async function checkServerStatus() {
   }
 }
 checkServerStatus().catch(console.dir);
-
 
 app.get("/api/latest", (req, res) => {
 
@@ -97,6 +93,39 @@ app.get("/api/address/:id", (req, res) => {
   }
 });
 
+app.get("/api/price/:id", (req, res) => {
+
+  var id = req.params.id;
+
+  if(id.startsWith('0') || id.startsWith('1') || id.startsWith('2') || id.startsWith('3')) {
+    getHistoricalPrice(id).then((result) => {  
+      if (!result) {
+        console.log("Price data not found");
+      } 
+      else {
+        console.log(result[0])
+        res.json(result[0])
+      }
+    }); 
+  }
+  else {
+    console.log("Blocked invalid request: " + id)
+    return res.sendStatus(204);
+  }
+});
+
+async function getHistoricalPrice(date) {
+  let result;
+  try {
+    await client.connect();
+    let blockchaindb = await client.db("blockchain")
+    console.log("Fetching price on " + date);
+    result = await blockchaindb.collection("historical_price_data").find({"date": date}).toArray();
+  } finally {
+    return (result);
+  }
+}
+
 async function getAddressTransactions(address) {
   let result_to;
   let result_from;
@@ -139,7 +168,7 @@ async function getLatestBlocks() {
   try {
     await client.connect();
     let blockchaindb = await client.db("blockchain")
-    result = await blockchaindb.collection("block_headers").find({}).sort({height : -1}).limit(5).toArray();
+    result = await blockchaindb.collection("blocks_full").find({}).sort({"_id" : -1}).limit(5).toArray();
   } finally {
     return result;
   }

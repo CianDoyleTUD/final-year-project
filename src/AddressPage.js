@@ -6,7 +6,7 @@ class AddressPage extends React.Component{
 
     constructor(props) {
         super(props);
-        this.state = { apiResponse: "", address: "", txcount: "", balance: "0.0000000", spent: "", received: "" }
+        this.state = { transactions: "", address: "", txcount: "", balance: "0.0000000", spent: "", received: "" }
     }
     
     componentDidMount() {
@@ -26,13 +26,13 @@ class AddressPage extends React.Component{
         var total_received = 0.0;
 
         for (var i = 0; i < txin_count; i++) {
-            var value = this.state.apiResponse["received"][i].tx[0].outputs[0].value;
+            var value = this.state.transactions["received"][i].tx[0].outputs[0].value;
             total_received += value;
         }
         this.setState({received: total_received})
 
         for (var i = 0; i < txout_count; i++) {
-            var value = this.state.apiResponse["spent"][i].tx[0].inputs[0].value;
+            var value = this.state.transactions["spent"][i].tx[0].inputs[0].value;
             total_spent += value;
         }
         this.setState({spent: total_spent})
@@ -46,13 +46,15 @@ class AddressPage extends React.Component{
         fetch("http://localhost:3001/api/address/" + query)
             .then(res => res.json())
             .then(res => { 
-                this.setState({ apiResponse: res });
+                this.setState({ transactions: res });
                 this.calculateDetails(res)
             });
     };
+    
+    // TODO: GET THE CORRECT INPUT/OUTPUT IN CASES WHERE MULTIPLE I/Os
 
     render() {
-        if (!this.state.apiResponse) {
+        if (!this.state.transactions) {
             return <p>Loading...</p>
         }
         return (
@@ -66,21 +68,17 @@ class AddressPage extends React.Component{
                         <tr><td>Balance</td><td>{this.state.balance} BTC</td></tr>
                     </tbody>
                 </table>
-                <div className="TransactionTable">
+                <div className="TransactionTable"> 
                     <table>
-                        <AddressTransaction data={{ type: "Received", amount: 0.045, timestamp: 1646185387000 }}></AddressTransaction>
-                        {this.state.apiResponse["spent"].map((transaction, i) => {
+                        {this.state.transactions["spent"].map((transaction, i) => {
                             return (
-                                <><p key={i}>{transaction.tx[0].txid}</p>
-                                    <p>{transaction.tx[0].outputs[0].to}</p>
-                                    <p className='TransactionValueNegative'>{transaction.tx[0].inputs[0].value}</p></>
+                                <AddressTransaction key={i} data={{ type: "Spent", amount: transaction.tx[0].inputs[0].value, timestamp: transaction.tx[0].time, txid: transaction.tx[0].txid }}></AddressTransaction>
                             );
                         })}
-                        {this.state.apiResponse["received"].map((transaction, i) => {
+                        {this.state.transactions["received"].map((transaction, i) => {
+
                             return (
-                                <><p key={i}>{transaction.tx[0].txid}</p>
-                                    <p>{transaction.tx[0].outputs[0].to}</p>
-                                    <p className='TransactionValuePositive'>{transaction.tx[0].outputs[0].value}</p></>
+                                <AddressTransaction key={i} data={{ type: "Received", amount:transaction.tx[0].outputs[0].value, timestamp: transaction.tx[0].time, txid: transaction.tx[0].txid }}></AddressTransaction>
                             );
                         })}
                     </table>
