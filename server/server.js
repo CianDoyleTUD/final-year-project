@@ -33,7 +33,7 @@ app.get("/api/latest", (req, res) => {
       return res.sendStatus(404);
     } 
     else {
-      console.log(JSON.stringify(result))
+      console.log(result)
       res.json(result)
     }
 
@@ -134,8 +134,8 @@ async function getAddressTransactions(address) {
   try {
     await client.connect();
     let blockchaindb = await client.db("blockchain")
-    result_to = await blockchaindb.collection("blocks").find({"tx.outputs.to": address}).project({ _id: 0, "tx.$": 1 }).toArray();
-    result_from = await blockchaindb.collection("blocks").find({"tx.inputs.from": address}).project({ _id: 0, "tx.$": 1 }).toArray();
+    result_to = await blockchaindb.collection("blocks").find({"tx.outputs.to": address}).project({ _id: 0, "tx.$": 1 }).sort({"tx.time": -1}).toArray();
+    result_from = await blockchaindb.collection("blocks").find({"tx.inputs.from": address}).project({ _id: 0, "tx.$": 1 }).sort({"tx.time": -1}).toArray();
     result = {
       "received": result_to,
       "spent": result_from
@@ -168,7 +168,7 @@ async function getLatestBlocks() {
   try {
     await client.connect();
     let blockchaindb = await client.db("blockchain")
-    result = await blockchaindb.collection("blocks_full").find({}).sort({"_id" : -1}).limit(5).toArray();
+    result = await blockchaindb.collection("block_headers").find({}).sort({"_id" : -1}).limit(5).toArray();
   } finally {
     return result;
   }

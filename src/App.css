@@ -118,7 +118,6 @@ a, a:visited {
   justify-content: space-evenly;
   padding: 2em; 
   text-align: center;
-  border: 1px solid grey;
 }
 
 .BlockTable { 
@@ -172,7 +171,6 @@ a, a:visited {
   flex-direction: row;
   border-bottom: thin solid grey;
   padding: 1em;
-
 }
 
 .AddressInfo td {
@@ -210,8 +208,8 @@ a, a:visited {
   text-overflow: ellipsis;
 }
 
-.AddressTransaction {
+.noOverflow {
+  white-space: nowrap;
   overflow: hidden;
+  text-overflow: ellipsis;
 }
-
-
