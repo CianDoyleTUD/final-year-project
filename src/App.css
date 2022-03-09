@@ -56,7 +56,7 @@ form{
 a, a:visited {
   text-decoration: none;
   color: white;
-  font-size: large;
+  font-size: medium;
 }
 
 .SearchBarContainer {
@@ -116,7 +116,6 @@ a, a:visited {
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
-  padding: 2em; 
   text-align: center;
 }
 
@@ -133,22 +132,51 @@ a, a:visited {
   padding: 1em;
 }
 
+/************************************************************/
+
 .TransactionData {
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
-  border: 0px solid grey;
+  background-color: #2c3e50;
+  padding: 1em;
 }
 
 .Transaction {
   border: 0px solid red;
-  margin-bottom: 2em;
+  margin-top: 1em;
+}
+
+.TransactionID {
+  background-color: #202e3b;
+  height: 3em;
+}
+
+.TransactionID > a {
+  line-height: 3em;
 }
 
 .TransactionInputs, .TransactionOutputs{
   width: 25vw;
+  min-height: 4em;
   border: 0px solid grey;
 }
+
+.TransactionWallets {
+  display: grid;
+  grid-template-columns: 60% 40%;
+  max-width: 100%;
+}
+
+.nextButton {
+  width: 25em;
+  height: 5em;
+  background-color: #202e3b;
+  border-style: none;
+  margin: 3em;
+}
+
+/************************************************************/
 
 .TransactionValuePositive {
   color:green
@@ -177,9 +205,15 @@ a, a:visited {
   width: 20vw;
 }
 
-.LatestBlockTableRow > td{
+.LatestTableRow > td{
   text-align: center;
   padding: 0.75em;
+}
+
+.LatestTransactionTableRow {
+  text-align: center;
+  padding: 0.75em;
+  background-color: blue;
 }
 
 .AddressTransactionHeader{

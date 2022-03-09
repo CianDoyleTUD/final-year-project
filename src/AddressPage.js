@@ -91,6 +91,7 @@ class AddressPage extends React.Component{
                         <tr><td>Bitcoin received</td><td>{this.state.received} BTC</td></tr>
                         <tr><td>Bitcoin sent</td><td>{this.state.spent} BTC</td></tr>
                         <tr><td>Balance</td><td>{this.state.balance} BTC</td></tr>
+                        <tr><td>Value</td><td>{this.state.value} BTC</td></tr>
                     </tbody>
                 </table>
                 <div className="TransactionTable"> 

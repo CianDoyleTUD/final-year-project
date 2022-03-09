@@ -168,9 +168,13 @@ async function getLatestBlocks() {
   try {
     await client.connect();
     let blockchaindb = await client.db("blockchain")
-    result = await blockchaindb.collection("block_headers").find({}).sort({"_id" : -1}).limit(5).toArray();
+    block_headers = await blockchaindb.collection("block_headers").find({}).sort({"_id" : -1}).limit(5).toArray();
+    block_full = await blockchaindb.collection("blocks_full").find({}).sort({"_id" : -1}).limit(1).toArray();
   } finally {
-    return result;
+    return {
+      "block_headers": block_headers,
+      "block_full": block_full 
+    };
   }
 }
 

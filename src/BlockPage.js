@@ -1,5 +1,6 @@
 import Block from "./Block";
 import React from 'react';
+import NavBar from "./NavBar";
 
 class BlockPage extends React.Component{
 
@@ -22,9 +23,10 @@ class BlockPage extends React.Component{
 
     render() {
         return (
-            <div className="BlockPage">
-                <Block blockdata={this.state.apiResponse}/>
-            </div>
+            <>
+            <NavBar /><div className="BlockPage">
+                <Block blockdata={this.state.apiResponse} />
+            </div></>
         );
     }
 }

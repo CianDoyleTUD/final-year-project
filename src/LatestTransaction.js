@@ -1,9 +1,16 @@
 import React from "react";
+import { calculateBlockTimes } from "./UtilFunctions";
 
 class LatestTransaction extends React.Component {
 
     constructor(props) {
         super(props);
+        this.state = { formattedTime: "" }
+    }
+
+    componentDidMount() {
+        this.setState({formattedTime: calculateBlockTimes(this.props.data.time)})
+        console.log(this.props.data.time)
     }
     
     render() {
@@ -11,9 +18,14 @@ class LatestTransaction extends React.Component {
             return <p>Loading...</p>
         }
         return (
-            <div className="LatestBlockInfo">
-                <><a href={ 'tx/' + this.props.data._id }>{this.props.data._id}</a><span>{this.props.data.height}</span><span>{this.props.data.time}</span></>
-            </div>
+                <tr className="LatestTableRow">
+                    <td>
+                        <a href={ 'tx/' + this.props.data.txid }>{this.props.data.txid}</a>
+                    </td>
+                    <td>
+                        <span>{this.state.formattedTime}</span>
+                    </td>
+                </tr>
         )
     }
 };  

@@ -34,7 +34,7 @@ class Block extends React.Component {
                             </tr>
                             <tr>
                                 <td>Transaction count</td>
-                                <td>{this.props.blockdata.ntx}</td>
+                                <td>{this.props.blockdata.nTx}</td>
                             </tr>
                             <tr>
                                 <td>Difficulty</td>
@@ -50,7 +50,7 @@ class Block extends React.Component {
                             </tr>
                             <tr>
                                 <td>Size</td>
-                                <td>{this.props.blockdata.blocksize} bytes</td>
+                                <td>{this.props.blockdata.size} bytes</td>
                             </tr>
                             <tr>
                                 <td>Previous block hash</td>
