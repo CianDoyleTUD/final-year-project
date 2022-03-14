@@ -23,4 +23,4 @@ yarn-debug.log*
 yarn-error.log*
 
 cfg.json
-/scripts
+upload.py
