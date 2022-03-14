@@ -1,5 +1,5 @@
 import React from 'react';
-import { UNIXToDate } from './UtilFunctions';
+import { UNIXToDate } from './Utils/UtilFunctions';
 
 class AddressTransaction extends React.Component {
 
@@ -40,7 +40,7 @@ class AddressTransaction extends React.Component {
                     <span>Date</span>
                     <span>Hash</span>
                 </div>
-                <div className='AddressTransactionBody'>
+                <div style={{"padding": "10px"}} className='AddressTransactionBody'>
                     <span>{this.props.data.amount} BTC</span>
                     {this.state.transactionType}
                     <span>{this.state.date}</span>
