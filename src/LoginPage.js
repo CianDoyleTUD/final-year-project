@@ -30,7 +30,8 @@ class LoginPage extends React.Component {
             .then(res => {
                 if(res['validCredentials']) {
                     this.setState({validCredentials: true}) 
-                    this.setState({errorMessage: <p style={{"color": "blue"}}>Logged in</p>}) 
+                    sessionStorage.setItem('username', this.state.username);
+                    window.location = "http://localhost:3000/analytics";
                 }
                 else {
                     this.setState({errorMessage: <p style={{"color": "red"}}>Invalid login credentials</p>}) 

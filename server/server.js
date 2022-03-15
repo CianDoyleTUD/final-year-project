@@ -11,7 +11,6 @@ app.use(bp.urlencoded({ extended: true }))
 
 var jsonParser = bp.json();
 
-
 const { MongoClient } = require("mongodb");
 const uri = "mongodb://localhost:27017/";
 const client = new MongoClient(uri);
@@ -44,6 +43,27 @@ app.post("/login", jsonParser, (req, res) => {
     });
   });
 });
+
+app.get("/api/stats", (req, res) => {
+
+  var id = req.params.id;
+
+  console.log("Query called -> " + id);
+
+  getStats().then((result) => {  
+
+    if (!result) {
+      console.log("No results found for query");
+      return res.sendStatus(404);
+    } 
+    else {
+      console.log(result)
+      res.json(result)
+    }            
+
+  });
+});
+
 
 app.get("/api/latest", (req, res) => {
 
@@ -202,6 +222,18 @@ async function getLatestBlocks() {
     };
   }
 }
+
+async function getStats(date) {
+  let result;
+  try {
+    await client.connect();
+    let blockchaindb = await client.db("blockchain")
+    result = await blockchaindb.collection("stats").findOne({"date": date});
+  } finally {
+    return result;
+  }
+}
+
 
 async function loginUser(username, password) {
   let user;

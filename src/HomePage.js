@@ -1,9 +1,14 @@
 import React from 'react';
 import LatestBlock from "./LatestBlock";
 import LatestTransaction from "./LatestTransaction";
-import NavBar from './NavBar.js';
-import SearchBar from './SearchBar.js';
+import NavBar from './NavBar';
+import SearchBar from './SearchBar'
 import logo from './btc.png';
+import StatWidget from './StatWidget';
+
+const sampleData = {
+    title: "Transactions (24h)"
+}
 
 class HomePage extends React.Component{
 
@@ -32,7 +37,15 @@ class HomePage extends React.Component{
                 <>
                 <div className="HomePage">
                     <NavBar/>
+                    <div className='statWidgetContainer'>
+                        <StatWidget data = {sampleData}/>
+                        <StatWidget data = {sampleData}/>
+                        <StatWidget data = {sampleData}/>
+                        <StatWidget data = {sampleData}/>
+                    </div>
+            
                     <img src={logo}></img>
+           
                     <SearchBar/>
                     <div className='Latest'>
                         <div className="LatestBlocks">

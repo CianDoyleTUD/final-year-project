@@ -1,3 +1,4 @@
+
 export function UNIXToDate(timestamp) {
     let formattedTime = new Date(timestamp);
     let month = formattedTime.getMonth()
@@ -21,4 +22,13 @@ export function calculateBlockTimes(timestamp) {
     else {
         return Math.floor(timeDifference / 86400) + " days ago"
     }
+}
+
+export function downloadUrlAsFile(URL, file) {
+    let downloadLink = document.createElement("a");
+    downloadLink.href = URL;
+    downloadLink.download = file;
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
 }
