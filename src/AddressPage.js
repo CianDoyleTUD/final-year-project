@@ -1,7 +1,7 @@
 import React from 'react';
 import AddressTransaction from './AddressTransaction';
 import NavBar from './NavBar.js';
-import { downloadUrlAsFile, UNIXToDate } from './Utils/UtilFunctions';
+import { downloadUrlAsFile, UNIXToDate } from './UtilFunctions';
 import QRCode from "react-qr-code";
 
 class AddressPage extends React.Component{
@@ -13,20 +13,15 @@ class AddressPage extends React.Component{
     
     componentDidMount() {
         this.fetchAddressData();
-        //this.fetchPrice();
-    }
-
-    fetchPrice() {
-       
     }
 
     calculateDetails(res) {
 
-        Number.prototype.round = function(places) { // https://stackoverflow.com/questions/11832914/how-to-round-to-at-most-2-decimal-places-if-necessary
+        Number.prototype.round = function(places) {
             return +(Math.round(this + "e+" + places)  + "e-" + places);
         }
 
-        this.setState({csvFile: "date,type,amount,value,hash\n"})
+        this.setState({csvFile: "date,type,amount(btc),value($),hash\n"})
 
         const txout_count = res["spent"].length;
         const txin_count = res["received"].length;
@@ -35,25 +30,47 @@ class AddressPage extends React.Component{
         let total_received = 0.0;
 
         for (var i = 0; i < txin_count; i++) {
+
             this.setState({txArray: [...this.state.txArray, {"data": this.state.transactions["received"][i].tx[0], "type": "Received"}] } )
+
+            const txid = this.state.transactions["received"][i].tx[0].txid;
             const value = this.state.transactions["received"][i].tx[0].outputs[0].value;
             const time = UNIXToDate(this.state.transactions["received"][i].tx[0].time)
-            this.setState({csvFile: this.state.csvFile + time + ",Received," + value + ",1000" + "\n"})
+
+            fetch("http://localhost:3001/api/price/" + time)
+            .then(res => res.json())
+            .then(res => {
+                this.setState({
+                    csvFile: this.state.csvFile + time + ",Received," + value + "," + (res['price'] * value).round(2) + "," + txid + "\n", 
+                    value: (res['price'] * this.state.balance).round(2)
+                })
+            })
             total_received += value;
         }
         this.setState({received: total_received})
 
         for (var i = 0; i < txout_count; i++) {
+
             this.setState({txArray: [...this.state.txArray, {"data": this.state.transactions["spent"][i].tx[0],  "type": "Spent"}]})
+
+            const txid = this.state.transactions["spent"][i].tx[0].txid;
             const value = this.state.transactions["spent"][i].tx[0].inputs[0].value;
             const time = UNIXToDate(this.state.transactions["spent"][i].tx[0].time)
-            this.setState({csvFile: this.state.csvFile + time + ",Spent," + value + ",1000" + "\n"})
+
+            fetch("http://localhost:3001/api/price/" + time)
+            .then(res => res.json())
+            .then(res => {
+                this.setState({
+                    csvFile: this.state.csvFile + time + ",Spent," + value + "," + (res['price'] * value).round(2) + "," + txid + "\n", 
+                    value: (res['price'] * this.state.balance).round(2)
+                })
+            })
             total_spent += value;
         }
+
         this.setState({spent: total_spent})
         this.setState({balance: (total_received - total_spent).round(6)})
-        this.setState({csvHref: 'data:text/csv;charset=utf-8,' + encodeURIComponent(this.state.csvFile)}); // https://stackoverflow.com/questions/17564103/using-javascript-to-download-file
-        console.log(this.state.txArray)
+        this.setState({csvHref: 'data:text/csv;charset=utf-8,' + encodeURIComponent(this.state.csvFile)}); 
 
         let tempArray = this.state.txArray;
 
@@ -65,7 +82,6 @@ class AddressPage extends React.Component{
 
         const timestamp = Date.now();
         const query = UNIXToDate(timestamp)
-        console.log(this.state.balance)
         fetch("http://localhost:3001/api/price/" + query)
             .then(res => res.json())
             .then(res => this.setState({value: (res['price'] * this.state.balance).round(2) }))
@@ -77,7 +93,6 @@ class AddressPage extends React.Component{
         //this.setState(this.state);
     }
 
-    // Downloads QRCode as png https://stackoverflow.com/questions/23218174/how-do-i-save-export-an-svg-file-after-creating-an-svg-with-d3-js-ie-safari-an
     downloadQRCode() {
         const canvas = document.getElementById("QRCode").outerHTML;
         const svgBlob = new Blob([canvas], {type:"image/svg+xml;charset=utf-8"});
@@ -95,9 +110,12 @@ class AddressPage extends React.Component{
                 this.calculateDetails(res)
             });
     };
+
+    updateCSV() {
+        this.setState({csvHref: 'data:text/csv;charset=utf-8,' + encodeURIComponent(this.state.csvFile)}); 
+    }
     
-    // TODO: GET THE CORRECT INPUT/OUTPUT IN CASES WHERE MULTIPLE I/Os
-    // TODO: GET VALUE IN CSV
+   
 
     render() {
         if (!this.state.transactions) {
@@ -134,7 +152,7 @@ class AddressPage extends React.Component{
                 </div>
                 <div className="TransactionTable"> 
                     <table>
-                        <a className='downloadTransactionButton' href={this.state.csvHref} download="transaction_data.csv">Download full transaction data</a><p></p>
+                        <a onClick={this.updateCSV.bind(this)} className='downloadTransactionButton' href={this.state.csvHref} download="transaction_data.csv">Download full transaction data</a><p></p>
                         <span>Show received</span><input type="checkbox" defaultChecked={this.state.displayReceived} onChange={() => this.setState({displayReceived: !this.state.displayReceived})}/>
                         <span>Show spent</span><input type="checkbox" defaultChecked={this.state.displaySpent} onChange={() => this.setState({displaySpent: !this.state.displaySpent})}/>
                         {/* {this.state.transactions["spent"].map((transaction, i) => {
@@ -171,3 +189,15 @@ class AddressPage extends React.Component{
     }
 }
 export default AddressPage;
+
+
+
+
+
+ // TODO: GET THE CORRECT INPUT/OUTPUT IN CASES WHERE MULTIPLE I/Os
+    // TODO: GET VALUE IN CSV
+
+     // https://stackoverflow.com/questions/11832914/how-to-round-to-at-most-2-decimal-places-if-necessary
+
+         // Downloads QRCode as png https://stackoverflow.com/questions/23218174/how-do-i-save-export-an-svg-file-after-creating-an-svg-with-d3-js-ie-safari-an
+// https://stackoverflow.com/questions/17564103/using-javascript-to-download-file

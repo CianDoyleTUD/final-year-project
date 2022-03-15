@@ -322,13 +322,12 @@ a, a:visited {
 .LoginContainer {
   margin:auto;
   position: fixed;
-  padding: 1em;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
   width: 40vw;
-  height: 40vh;
+  height: 30vh;
   max-width: 500px;
   overflow: hidden;
   background-color: white;
@@ -336,6 +335,7 @@ a, a:visited {
 
 .LoginContainer > form {
   margin:auto;
+  margin-top: 1em;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
@@ -348,6 +348,7 @@ a, a:visited {
 .loginInputContainer > input {
   margin-left: auto;
   margin-right: auto;
+  margin-top: 1em;
   width: 80%;
   font-size: x-large;
 }
@@ -359,29 +360,44 @@ a, a:visited {
 }
 
 .loginInputContainer {
-  height:60%;
+  height:100%;
   display: flex;
   flex-direction: column;
+  justify-content: space-evenly;
+  
   font-size: large;
-  border-bottom: thin solid grey;
 }
 
+.submitButtonContainer {
+  display: block;
+  height: 40%;
+  background-color: #f0f1f3;
+  display: flex;
+  align-items: center;
+  margin-bottom: 1em;
+}
 
 .loginInput {
   color: black;
   height: 1.5em;
   font-size: large;
   border: none;
-  border-bottom: thin solid grey;
+  border-bottom: thin solid rgb(202, 201, 201);
   box-shadow: none;
 }
 
 .submitButton {
-  width: 50%;
-  height: 2em;
-  background-color: red;
+  display: inline-block;
+  margin: 0 auto;
+  height: 4em;
+  background-color: #45617e;
   outline: none;
+  width: 50%;
   border: 0;
+}
+
+.submitButton:hover {
+  background-color: #516f8f;
 }
 
 .statWidgetContainer {
