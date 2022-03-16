@@ -1,4 +1,5 @@
 import React from "react";
+import NavBar from "../Components/NavBar";
 
 class LoginPage extends React.Component {
 
@@ -53,22 +54,23 @@ class LoginPage extends React.Component {
 
     render() {
         return (
+            <><NavBar />
             <div className="LoginPage">
                 <div className="LoginContainer">
                     <form action="" onSubmit={this.handleSubmit}>
                         <div className="loginInputContainer">
-                            <h1 style={{"color": "black", "margin": 0}}>Log in</h1>
-                            <h4 style={{"color": "black", "margin": 0}}>An account is required for some features</h4>
-                            <input className="loginInput" id="username" type="text" placeholder="Username" value={this.state.username} onChange={this.handleChange}/>
-                            <input className="loginInput" id="password" type="password" placeholder="Password" value={this.state.password} onChange={this.handleChange}/>
+                            <h1 style={{ "color": "black", "margin": 0 }}>Log in</h1>
+                            <h4 style={{ "color": "black", "margin": 0 }}>An account is required for some features</h4>
+                            <input className="loginInput" id="username" type="text" placeholder="Username" value={this.state.username} onChange={this.handleChange} />
+                            <input className="loginInput" id="password" type="password" placeholder="Password" value={this.state.password} onChange={this.handleChange} />
                             {this.state.errorMessage}
                         </div>
                         <div className="submitButtonContainer">
-                            <button className="submitButton" type="button"  onClick={this.handleSubmit} >Login</button>
+                            <button className="submitButton" type="button" onClick={this.handleSubmit}>Login</button>
                         </div>
                     </form>
                 </div>
-            </div>
+            </div></>
         )
     }
 };  

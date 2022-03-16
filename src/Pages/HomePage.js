@@ -1,10 +1,10 @@
 import React from 'react';
-import LatestBlock from "./LatestBlock";
-import LatestTransaction from "./LatestTransaction";
-import NavBar from './NavBar';
-import SearchBar from './SearchBar'
+import LatestBlock from "../Components/LatestBlock";
+import LatestTransaction from "../Components/LatestTransaction";
+import NavBar from '../Components/NavBar';
+import SearchBar from '../Components/SearchBar'
 import logo from './btc.png';
-import StatWidget from './StatWidget';
+import StatWidget from '../Components/StatWidget';
 
 const sampleData = {
     title: "Transactions (24h)"

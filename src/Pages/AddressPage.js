@@ -1,7 +1,7 @@
 import React from 'react';
-import AddressTransaction from './AddressTransaction';
-import NavBar from './NavBar.js';
-import { downloadUrlAsFile, UNIXToDate } from './UtilFunctions';
+import AddressTransaction from '../Components/AddressTransaction';
+import NavBar from '../Components/NavBar.js';
+import { downloadUrlAsFile, UNIXToDate } from '../Utils/UtilFunctions';
 import QRCode from "react-qr-code";
 
 class AddressPage extends React.Component{

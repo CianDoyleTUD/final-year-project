@@ -1,5 +1,5 @@
 import React from 'react';
-import { UNIXToDate } from './UtilFunctions';
+import { UNIXToDate } from '../Utils/UtilFunctions';
 
 class AddressTransaction extends React.Component {
 

@@ -1,11 +1,11 @@
 import './App.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import BlockPage from './BlockPage.js';
-import HomePage from './HomePage.js';
+import BlockPage from './Pages/BlockPage.js';
+import HomePage from './Pages/HomePage.js';
 import React from 'react';
-import AddressPage from './AddressPage.js';
-import LoginPage from './LoginPage.js';
-import AnalyticsPage from './AnalyticsPage'
+import AddressPage from './Pages/AddressPage.js';
+import LoginPage from './Pages/LoginPage.js';
+import AnalyticsPage from './Pages/AnalyticsPage'
 
 
 function App() {

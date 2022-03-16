@@ -1,6 +1,6 @@
-import Block from "./Block";
+import Block from "../Components/Block";
 import React from 'react';
-import NavBar from "./NavBar";
+import NavBar from "../Components/NavBar";
 
 class BlockPage extends React.Component{
 

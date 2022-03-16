@@ -1,5 +1,5 @@
 import React from "react";
-import { calculateBlockTimes } from "./UtilFunctions";
+import { calculateBlockTimes } from "../Utils//UtilFunctions";
 
 class LatestTransaction extends React.Component {
 

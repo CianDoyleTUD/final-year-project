@@ -80,9 +80,42 @@ def update_transaction_stats(date):
                 for output in tx['outputs']:
                     aggregate_transaction_value += output['value']
 
-        database["transactions_24h"].update_one({ "date": date }, { "$inc": { "aggregate_transaction_value": aggregate_transaction_value, "transaction_count": transaction_count })
+        database["transactions_24h"].update_one({ "date": date }, { "$inc": { "aggregate_transaction_value": aggregate_transaction_value, "transaction_count": transaction_count } })
 
         
 
-update_transaction_stats("2022-03-15")
+# Estimate the hash rate in the past X hours
+# Hash Rate:
+#   (((Blocks Found / Blocks Expected) * (Difficulty * 2^32)) / 600) 
+#   OR 
+#   (2^32 * (Difficulty / Time between blocks))
+
+def get_hash_rate(period_hours):
+
+    time_now = 1377760020
+    #time_now = time.time()
+    blocks_expected = period_hours * 6 # Block expected every 10 mins
+
+    results = database["blocks_full"].find({ "time": {"$gte": time_now - (period_hours * 3600), "$lte": time_now} }, {"_id": 0, "difficulty": 1, "time": 1}).sort("time", -1)
+
+    block_list = list(results)
+    blocks_found = len(block_list)
+    block_difficulty = block_list[0]['difficulty']
+
+    total_block_time = 0
+
+    for i in range(0, len(block_list)):
+        if(i > 0):
+            total_block_time += (block_list[i-1]['time'] - block_list[i]['time'] )
+
+    average_block_time = total_block_time / blocks_found
+
+    hash_rate_ths = (2**32 * (block_difficulty / average_block_time)) / 1e12 # (blocks_found / blocks_expected) * (block_difficulty * 2**32) / 600 / 1e12 
+    hash_rate_formatted = '{:f}'.format(hash_rate_ths)
+
+    return hash_rate_formatted
+
+hash_rate = get_hash_rate(24)
+print(hash_rate)
+#update_transaction_stats("2022-03-15")
 #upload_transaction_stats("2009-01-06", "2022-03-11")
