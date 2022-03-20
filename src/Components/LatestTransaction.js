@@ -20,7 +20,7 @@ class LatestTransaction extends React.Component {
         return (
                 <tr className="LatestTableRow">
                     <td>
-                        <a href={ 'tx/' + this.props.data.txid }>{this.props.data.txid}</a>
+                        <a href={ 'tr/' + this.props.data.txid }>{this.props.data.txid}</a>
                     </td>
                     <td>
                         <span>{this.state.formattedTime}</span>

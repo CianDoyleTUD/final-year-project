@@ -38,10 +38,10 @@ class HomePage extends React.Component{
                 <div className="HomePage">
                     <NavBar/>
                     <div className='statWidgetContainer'>
-                        <StatWidget data = {sampleData}/>
-                        <StatWidget data = {sampleData}/>
-                        <StatWidget data = {sampleData}/>
-                        <StatWidget data = {sampleData}/>
+                        <StatWidget data = {{title: "Current price ($)", type: "price"}}/>
+                        <StatWidget data = {{title: "Transactions (24h)", type: "N/A"}}/>
+                        <StatWidget data = {{title: "N/A", type: "N/A"}}/>
+                        <StatWidget data = {{title: "N/A", type: "N/A"}}/>
                     </div>
             
                     <img src={logo}></img>

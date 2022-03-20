@@ -42,13 +42,6 @@ class TransactionTable extends React.Component {
         }
     }
 
-    scrollToBottom = () => {
-        this.messagesEnd.scrollIntoView({ behavior: "smooth" });
-      }
-
-    componentDidUpdate() {
-    }
-    
     render() {
         if (!this.props.data) {
             return <div />

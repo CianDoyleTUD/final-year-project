@@ -151,6 +151,7 @@ a, a:visited {
 
 .TransactionID {
   background-color: #202e3b;
+  text-align: center;
   height: 3em;
 }
 
@@ -417,7 +418,6 @@ a, a:visited {
   margin: auto;
   display: grid;
   grid-template-rows: 35% 75%;
-  border: thin solid black;
   overflow: hidden;
 }
 
@@ -436,3 +436,45 @@ a, a:visited {
   line-height: 5em;
   height: 100%;
 }
+
+.AnalyticsHeader{
+  height: 10vh;
+  width: 100%;
+  text-align: center;
+}
+
+
+.TransactionContainer {
+  margin:auto;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 80vw;
+  height: 30vh;
+  max-width: 1200px;
+  max-height: 600px;
+  overflow: hidden;
+  /*background-color: #45617e;*/
+}
+
+/* 
+.TransactionHeader {
+  overflow: hidden;
+  text-align: center;
+  background-color: #34495e;
+  width: 100%;
+  height: 3em;
+}
+
+.TransactionHeader > h3 {
+  line-height: 2em;
+  margin: 0;
+  color:white;
+}
+
+.TransactionBody {
+  width: 100%;
+  height: 90%;
+} */

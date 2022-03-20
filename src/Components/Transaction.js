@@ -50,7 +50,7 @@ class Transaction extends React.Component {
             return (
                 <div className="Transaction">
                     <div className="TransactionID">
-                        <a>View full transaction</a>
+                        <a>{this.props.data.txid}</a>
                     </div>
                     <div className="TransactionData">
                         <div className="TransactionInputs">

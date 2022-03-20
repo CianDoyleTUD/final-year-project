@@ -6,6 +6,7 @@ import React from 'react';
 import AddressPage from './Pages/AddressPage.js';
 import LoginPage from './Pages/LoginPage.js';
 import AnalyticsPage from './Pages/AnalyticsPage'
+import TransactionPage from './Pages/TransactionPage';
 
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
     <div className="App">
       <Routes>
         <Route path="/" element={<HomePage/> }/>
+        <Route path="/tr/:tr" element={<TransactionPage/> }/>
         <Route path="/tx/:tx" element={<BlockPage/> }/>
         <Route path="/address/:addr" element={<AddressPage/> }/>
         <Route path="/login" element={<LoginPage/> }/>

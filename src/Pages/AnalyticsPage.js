@@ -26,9 +26,15 @@ class AnalyticsPage extends React.Component {
             window.location = "http://localhost:3000/login";
         }
         return (
-            <><NavBar></NavBar><div className="Test">
-                <p>Logged in as {this.state.username}</p>
-                <button onClick={this.logOut} style={{ "color": "black" }}>Log out</button>
+            <><NavBar></NavBar>
+            <div className="AnalyticsPage">
+                <div className="AnalyticsHeader">
+                    <h1>Logged in as {this.state.username}</h1>
+                    <button onClick={this.logOut} style={{ "color": "black" }}>Log out</button>
+                </div>
+                <div className="AnalyticsContainer">
+                    
+                </div>
             </div></>
         )
     }
