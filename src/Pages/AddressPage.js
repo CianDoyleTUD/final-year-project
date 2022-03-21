@@ -115,8 +115,8 @@ class AddressPage extends React.Component{
         this.setState({csvHref: 'data:text/csv;charset=utf-8,' + encodeURIComponent(this.state.csvFile)}); 
     }
     
-   
 
+    
     render() {
         if (!this.state.transactions) {
             return <p>Loading...</p>

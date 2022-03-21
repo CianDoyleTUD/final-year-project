@@ -1,23 +1,52 @@
 import { Link } from "react-router-dom";
+import React from "react";
 
-function NavBar(props) {
-    return (
-        <div className="NavBar">
-            <nav>
-                <ul>
-                    <Link to="/">
-                        <li>
-                            Home
-                        </li>
-                    </Link>
-                    <Link to="/analytics">
-                        <li>
-                            Analytics
-                        </li>
-                    </Link>
-                </ul>
-            </nav>
-        </div>
-    );
+
+class NavBar extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.state = { username: "", loginButton: "" }
+        this.logOut = this.logIn.bind(this);
+    }
+
+    logIn() {
+        window.location = "http://localhost:3000/login";
+    }
+
+    componentDidMount() {
+        const username = sessionStorage.getItem('username');
+        this.setState({username: username})
+        console.log(username)
+
+        if(!username || username == "") {
+            this.setState({loginButton: <button className="loginButton" onClick={this.logIn}>Log in</button>})
+        }
+        else {
+            this.setState({loginButton: <span className="loginText">Logged in as {this.state.username}</span>})
+        }
+    }
+
+    render() {
+        return (
+            <div className="NavBar">
+                <nav>
+                    <ul>
+                        <Link to="/">
+                            <li>
+                                Home
+                            </li>
+                        </Link>
+                        <Link to="/analytics">
+                            <li>
+                                Analytics
+                            </li>
+                        </Link>
+                       {this.state.loginButton}
+                    </ul>
+                </nav>
+            </div>
+        );
+    }
 }
 export default NavBar;

@@ -44,6 +44,36 @@ app.post("/login", jsonParser, (req, res) => {
   });
 });
 
+app.post("/addwallet", jsonParser, (req, res) => {
+
+  console.log("Adding new wallet ...")
+
+  const [username, wallet, name] = [req.body.username, req.body.wallet, req.body.name]; 
+
+  console.log(username + wallet + name)
+
+  addWalletTracking(username, wallet, name).then((result) => {
+    if(result) {
+      console.log("Found")
+      res.json({walletAdded: true})
+    }
+    else {
+      res.json({walletAdded: false})
+    }
+  });
+});
+
+app.post("/removewallet", jsonParser, (req, res) => {
+
+  console.log("Removing tracking for wallet ...")
+
+  const [username, wallet] = [req.body.username, req.body.wallet]; 
+
+  removeWalletTracking(username, wallet).then((result) => {
+      res.json({walletRemoved: true})
+  });
+});
+
 app.get("/api/stats", (req, res) => {
 
   var id = req.params.id;
@@ -63,7 +93,6 @@ app.get("/api/stats", (req, res) => {
 
   });
 });
-
 
 app.get("/api/latest", (req, res) => {
 
@@ -114,6 +143,26 @@ app.get("/api/tx/:id", (req, res) => {
       console.log("Returned result");
       res.json(result)
     }
+  });
+});
+
+app.get("/api/trackedwallets/:id", (req, res) => {
+
+  var id = req.params.id;
+
+  console.log("Query called -> " + id);
+
+  getTrackedWallets(id).then((result) => {  
+
+    if (!result) {
+      console.log("No results found for query");
+      return res.sendStatus(404);
+    } 
+    else {
+      console.log(result)
+      res.json(result)
+    }            
+
   });
 });
 
@@ -234,7 +283,6 @@ async function getStats(date) {
   }
 }
 
-
 async function loginUser(username, password) {
   let user;
   try {
@@ -245,6 +293,68 @@ async function loginUser(username, password) {
   finally {
     if (!user) return false;
     return user.password;
+  }
+}
+
+async function addWalletTracking(username, wallet, name) {
+  let result;
+  try {
+    await client.connect();
+    let blockchaindb = await client.db("blockchain");
+    result = await blockchaindb.collection("tracked_wallets").findOne({"username": username});
+  }
+  finally {
+    if (!result) {
+      try {
+        await client.connect();
+        let blockchaindb = await client.db("blockchain");
+        result = await blockchaindb.collection("tracked_wallets").insertOne({"username": username, "tracked_wallets": [{wallet: wallet, name: name}]});
+      }
+      finally {
+        return true
+      }
+    }
+    else {
+      try {
+        await client.connect();
+        let blockchaindb = await client.db("blockchain");
+        result = await blockchaindb.collection("tracked_wallets").updateOne({"username": username}, {"$addToSet": {"tracked_wallets": {wallet: wallet, name: name}}});
+      }
+      finally {
+        if (result.modifiedCount == 0) {
+          console.log("Record already exists")
+          return false
+        }
+        else {
+          return true
+        }
+      }
+    }
+  }
+}
+
+async function removeWalletTracking(username, wallet, name) {
+  let result;
+  try {
+    await client.connect();
+    let blockchaindb = await client.db("blockchain");
+    result = await blockchaindb.collection("tracked_wallets").updateOne({"username": username}, { "$pull" : { "tracked_wallets": { wallet: wallet } } });
+  }
+  finally {
+    console.log(result)
+    return true
+  }
+}
+
+async function getTrackedWallets(username) {
+  let result;
+  try {
+    await client.connect();
+    let blockchaindb = await client.db("blockchain");
+    result = await blockchaindb.collection("tracked_wallets").findOne({"username": username});
+  }
+  finally {
+    return result;
   }
 }
 

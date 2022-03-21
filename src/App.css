@@ -478,3 +478,111 @@ a, a:visited {
   width: 100%;
   height: 90%;
 } */
+
+
+.loginButton {
+  width: 150px;
+  background-color: #273646;
+  color: white;
+  border-style: none;
+}
+
+.loginText {
+  text-align: center;
+  margin-top: auto;
+  margin-bottom: auto;
+  margin-right: 50px;
+}
+
+.WalletsContainer {
+  background-color: black;
+  width: 60vw;
+  height: 20vh;
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  height: max-content;
+}
+
+.WalletsHeader {
+  background-color: #273646;
+  width: 100%;
+  overflow: hidden;
+  height: 50px;
+  border: 1px solid red;
+  display: flex;
+}
+
+.WalletsBody {
+  width: 100%;
+  height: 100%;
+  height: max-content;
+  overflow: hidden;
+}
+
+.WalletsBody > span {
+  color: white;
+}
+
+.WalletsHeader > h1 {
+  width: 90%;
+  margin: 0;
+  line-height: 50px;
+  text-align: center;
+}
+
+.WalletsHeader > button {
+  height: 100%;
+  width: 10%;
+  background-color: #405468;
+  color: white;
+  border-style: none;
+  font-size: xx-large;
+  float: right;
+}
+
+.newWalletForm {
+  background-color: #273646;
+  width: 40vw;
+  margin: auto;
+
+}
+
+.newWalletForm > form > h1 {
+  text-align: center;
+  margin: 0;
+}
+
+.newWalletForm > form {
+  width: 80%;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+
+}
+
+.newWalletInput {
+  color:black;
+  margin-bottom: 1em;
+}
+
+.TrackedWalletContainer {
+  display: grid;
+  grid-template-columns: 50% 25% 20% 5%;
+  justify-content: center;
+  border: thin solid white;
+  margin: 1em;
+  font-size: large;
+}
+
+.XButton {
+  color: red;
+  background-color: #202e3b;
+  border-style: none;
+}
+
+.errorContainer {
+  width: 100%;
+  text-align: center;
+  color: red;
+}

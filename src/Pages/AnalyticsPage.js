@@ -1,5 +1,7 @@
 import React from "react";
+import Analytics from "../Components/Analytics";
 import NavBar from "../Components/NavBar";
+import TrackedWallets from "../Components/TrackedWallets";
 
 class AnalyticsPage extends React.Component {
 
@@ -16,6 +18,10 @@ class AnalyticsPage extends React.Component {
         this.setState({username: ""})
     }
 
+    fetchTrackedWallet() {
+
+    }
+
     componentDidMount() {
         const username = sessionStorage.getItem('username');
         this.setState({username: username})
@@ -29,12 +35,10 @@ class AnalyticsPage extends React.Component {
             <><NavBar></NavBar>
             <div className="AnalyticsPage">
                 <div className="AnalyticsHeader">
-                    <h1>Logged in as {this.state.username}</h1>
+                    <h1>Welcome, {this.state.username}</h1>
                     <button onClick={this.logOut} style={{ "color": "black" }}>Log out</button>
                 </div>
-                <div className="AnalyticsContainer">
-                    
-                </div>
+                <TrackedWallets/>
             </div></>
         )
     }
