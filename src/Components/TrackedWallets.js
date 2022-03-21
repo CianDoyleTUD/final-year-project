@@ -75,8 +75,8 @@ class TrackedWallets extends React.Component{
         else {
             this.trackNewWallet();
             this.hideWalletForm();
+            window.location.reload(false);
         }
-        window.location.reload(false);
         event.preventDefault()
     }
 

@@ -6,19 +6,17 @@ import SearchBar from '../Components/SearchBar'
 import logo from './btc.png';
 import StatWidget from '../Components/StatWidget';
 
-const sampleData = {
-    title: "Transactions (24h)"
-}
-
 class HomePage extends React.Component{
 
     constructor(props) {
         super(props);
-        this.state = { blocks: "" }
+        this.state = { blocks: "", stats: "", price: 0.0 }
     }
     
     componentDidMount() {
         this.fetchLatestBlocks()
+        this.fetchHeaderStats()
+        this.fetchCurrentPrice()
     }
 
     fetchLatestBlocks() {
@@ -27,21 +25,37 @@ class HomePage extends React.Component{
             .then(res => this.setState({ blocks: res }));
     };
 
+    fetchHeaderStats() {
+        fetch("http://localhost:3001/api/stats")
+            .then(res => res.json())
+            .then(res => {
+                console.log(res)
+                this.setState({ stats: res }) 
+            });
+    }
+
+    fetchCurrentPrice() {
+        const today = new Date();
+        const date = today.getFullYear() + "-" +  String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
+        console.log(date)
+        fetch("http://localhost:3001/api/price/" + date)
+            .then(res => res.json())
+            .then(res => this.setState({price: res['price']}));
+    }
+
     render() {
         if(!this.state.blocks) {
             return (<div>Loading...</div>)
         }
         else {
-            console.log(this.state.blocks);
             return (
                 <>
                 <div className="HomePage">
                     <NavBar/>
                     <div className='statWidgetContainer'>
-                        <StatWidget data = {{title: "Current price ($)", type: "price"}}/>
-                        <StatWidget data = {{title: "Transactions (24h)", type: "N/A"}}/>
-                        <StatWidget data = {{title: "N/A", type: "N/A"}}/>
-                        <StatWidget data = {{title: "N/A", type: "N/A"}}/>
+                        <StatWidget data = {{title: "Current price ($)", value: this.state.price}}/>
+                        <StatWidget data = {{title: "Transactions (24h)", value: this.state.stats.transaction_count}}/>
+                        <StatWidget data = {{title: "Network Hash rate", value: this.state.stats.hash_rate}}/>
                     </div>
             
                     <img src={logo}></img>

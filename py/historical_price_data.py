@@ -23,10 +23,9 @@ db = mongo_client["blockchain"]
 collection = db["historical_price_data"]
 
 def fetch_price_data(from_timestamp: int, limit=2000):
-    url = 'https://min-api.cryptocompare.com/data/v2/histoday?fsym=BTC&tsym=USD&toTs=' + str(from_timestamp) + '&limit=2000' + '&api_key=' + api_key
+    url = 'https://min-api.cryptocompare.com/data/v2/histoday?fsym=BTC&tsym=USD&toTs=' + str(from_timestamp) + '&limit=' + str(limit) + '&api_key=' + api_key
     r = requests.get(url)
     response = json.loads(r.text)
-    print(response)
     return response['Data']['Data']
 
 def populate_price_data():
@@ -70,22 +69,27 @@ def update_price_data():
     price_data = []
     query = collection.find({}, {"_id": 0, "timestamp_unix": 1}).sort("timestamp_unix", -1).limit(1)
     latest_price_time = query[0]["timestamp_unix"]
+    print("Latest query time: " + str(latest_price_time))
     current_time = math.floor(time.time())
     difference = current_time - latest_price_time
     if(difference > 86400):
         days_behind = math.floor(difference / 86400)
         print(str(days_behind) + " days behind")
-        historical_price_data = fetch_price_data(query[0]["timestamp_unix"], days_behind)
+        historical_price_data = fetch_price_data(current_time, limit=days_behind)
         for day in historical_price_data:
             timestamp = day['time']
-            formatted_timestamp = str(datetime.datetime.fromtimestamp(int(timestamp)))[0:10]
-            print(formatted_timestamp)
-            price_data.append({
-                "timestamp_unix": timestamp,
-                "date": formatted_timestamp,
-                "price": day['close']
-            })
+            if(timestamp != latest_price_time):
+                print(str(timestamp) + " closed at " + str(day['close']))
+                formatted_timestamp = str(datetime.datetime.fromtimestamp(int(timestamp)))[0:10]
+                print(formatted_timestamp)
+                price_data.append({
+                    "timestamp_unix": timestamp,
+                    "date": formatted_timestamp,
+                    "price": day['close']
+                })
     collection.insert_many(price_data)
 
 
-populate_price_data()
+#populate_price_data()
+update_price_data()
+#print(fetch_price_data(1647388800, 5))

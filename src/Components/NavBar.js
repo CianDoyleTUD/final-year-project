@@ -17,8 +17,7 @@ class NavBar extends React.Component {
     componentDidMount() {
         const username = sessionStorage.getItem('username');
         this.setState({username: username})
-        console.log(username)
-
+        
         if(!username || username == "") {
             this.setState({loginButton: <button className="loginButton" onClick={this.logIn}>Log in</button>})
         }

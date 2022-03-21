@@ -76,10 +76,7 @@ app.post("/removewallet", jsonParser, (req, res) => {
 
 app.get("/api/stats", (req, res) => {
 
-  var id = req.params.id;
-
-  console.log("Query called -> " + id);
-
+  console.log("Getting stats")
   getStats().then((result) => {  
 
     if (!result) {
@@ -88,7 +85,7 @@ app.get("/api/stats", (req, res) => {
     } 
     else {
       console.log(result)
-      res.json(result)
+      res.json(result[0])
     }            
 
   });
@@ -107,7 +104,6 @@ app.get("/api/latest", (req, res) => {
       return res.sendStatus(404);
     } 
     else {
-      console.log(result)
       res.json(result)
     }
 
@@ -272,12 +268,12 @@ async function getLatestBlocks() {
   }
 }
 
-async function getStats(date) {
+async function getStats() {
   let result;
   try {
     await client.connect();
     let blockchaindb = await client.db("blockchain")
-    result = await blockchaindb.collection("stats").findOne({"date": date});
+    result = await blockchaindb.collection("stats").find({}).sort({"timestamp_unix": -1}).limit(1).toArray();
   } finally {
     return result;
   }

@@ -10,7 +10,6 @@ class LatestTransaction extends React.Component {
 
     componentDidMount() {
         this.setState({formattedTime: calculateBlockTimes(this.props.data.time)})
-        console.log(this.props.data.time)
     }
     
     render() {
