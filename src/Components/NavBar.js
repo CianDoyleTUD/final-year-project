@@ -22,7 +22,9 @@ class NavBar extends React.Component {
             this.setState({loginButton: <button className="loginButton" onClick={this.logIn}>Log in</button>})
         }
         else {
-            this.setState({loginButton: <span className="loginText">Logged in as {this.state.username}</span>})
+            this.setState({loginButton: <span className="loginText">Logged in as {username}</span>})
+            console.log("Doing login one")
+            console.log(username)
         }
     }
 

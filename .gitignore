@@ -24,3 +24,4 @@ yarn-error.log*
 
 cfg.json
 upload.py
+/py

@@ -1,6 +1,8 @@
 import React from "react";
 import NavBar from "../Components/NavBar";
+import SearchBar from "../Components/SearchBar";
 import Transaction from "../Components/Transaction";
+import logo from './btc.png';
 
 const sampleData = {
     "txid": "3ed367c5ee21497b5395dcc11f53fded0c734e8a19a15f8bbc4f534a73506626",
@@ -51,6 +53,7 @@ class TransactionPage extends React.Component {
         }
         return (
             <><NavBar></NavBar>
+            <SearchBar></SearchBar>
             <div className="TransactionPage">
                 <div className="TransactionContainer">
                     <Transaction data={sampleData}/>

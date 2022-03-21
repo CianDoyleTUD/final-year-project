@@ -4,12 +4,19 @@ class Transaction extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = { blockReward: 0.0, walletCount: 0 }
+        this.state = { blockReward: 0.0, walletCount: 0, trackedWallets: [], fetched: false}
     }
 
     componentDidMount() {
         if(!this.props.data.inputs)
             this.getBlockReward();
+
+            const username = sessionStorage.getItem('username');
+            if(username != "") {
+                fetch("http://localhost:3001/api/trackedwallets/" + username)
+                    .then(res => res.json())
+                    .then(res => this.setState({trackedWallets: res['tracked_wallets'], fetched: true}))
+            }
     }
 
     getBlockReward() {
@@ -29,7 +36,7 @@ class Transaction extends React.Component {
             return (
                 <div className="Transaction">
                     <div className="TransactionID">
-                        <a>View full transaction</a>
+                        <a href={ 'http://localhost:3000/tr/' + this.props.data.txid }>View full transaction</a>
                     </div>
                     <div className="TransactionData">
                         <div className="TransactionInputs">
@@ -39,7 +46,11 @@ class Transaction extends React.Component {
                         <div className="TransactionOutputs">
                             <p>Outputs</p>
                             <div className="TransactionWallets">
-                                {this.props.data.outputs.map((tx,i) => <><a className="noOverflow" style={{'text-align': 'left'}} href={'../address/' + tx.to}>{tx.to}</a><span style={{'text-align': 'right'}} className="TransactionValuePositive"> (+{tx.value} BTC)</span><br/></>)}
+                                {this.props.data.outputs.map((tx,i) => {
+                                    return (
+                                        <><a className="noOverflow" style={{ 'text-align': 'left' }} href={'../address/' + tx.to}>{tx.to}</a><span style={{ 'text-align': 'right' }} className="TransactionValuePositive"> (+{tx.value} BTC)</span><br /></>
+                                    )
+                                })}
                             </div>
                         </div>  
                     </div>
@@ -56,14 +67,50 @@ class Transaction extends React.Component {
                         <div className="TransactionInputs">
                             <p>Inputs</p>
                             <div className="TransactionWallets">
-                                {this.props.data.inputs.map((tx,i) => <><a className="noOverflow" style={{'text-align': 'left'}} href={'../address/' + tx.from}>{tx.from}</a><span style={{'text-align': 'right'}} className="TransactionValueNegative"> (-{tx.value} BTC)</span></>)}
+                                {this.props.data.inputs.map((tx,i) => {
+                                    let addr = tx.from;
+                                    let namedWallet = false;
+                                    if (this.state.fetched) {
+                                        for(let i = 0; i < this.state.trackedWallets.length; i++) {
+                                            if (this.state.trackedWallets[i].wallet == tx.from) {
+                                                addr = this.state.trackedWallets[i]['name'] + " *";
+                                                namedWallet = true
+                                                break;
+                                            }
+                                        }
+                                        if (namedWallet) {
+                                            return (<><a className="noOverflow" style={{ 'text-align': 'left', 'font-weight': '500' }} href={'../address/' + tx.from}>{addr}</a><span style={{ 'text-align': 'right' }} className="TransactionValueNegative"> (-{tx.value} BTC)</span></>)
+                                        }
+                                        else {
+                                            return (<><a className="noOverflow" style={{ 'text-align': 'left', 'font-weight': '300' }} href={'../address/' + tx.from}>{addr}</a><span style={{ 'text-align': 'right' }} className="TransactionValueNegative"> (-{tx.value} BTC)</span></>)
+                                        }
+                                    }
+                                })}
                             </div>
                         </div>
                         <p><span>&#8594;</span></p>
                         <div className="TransactionOutputs">
                             <p>Outputs</p>
                             <div className="TransactionWallets">
-                                {this.props.data.outputs.map((tx,i) => <><a className="noOverflow" style={{'text-align': 'left'}} href={'../address/' + tx.to}>{tx.to}</a><span style={{'text-align': 'right'}} className="TransactionValuePositive"> (+{tx.value} BTC)</span></>)}
+                                {this.props.data.outputs.map((tx,i) => {
+                                    let addr = tx.to;
+                                    let namedWallet = false;
+                                    if (this.state.fetched) {
+                                        for(let i = 0; i < this.state.trackedWallets.length; i++) {
+                                            if (this.state.trackedWallets[i].wallet == tx.to) {
+                                                addr = this.state.trackedWallets[i]['name'] + " *";
+                                                namedWallet = true
+                                                break;
+                                            }
+                                        }
+                                        if (namedWallet) {
+                                            return (<><a className="noOverflow" style={{'text-align': 'left', 'font-weight': '500'}} href={'../address/' + tx.to}>{addr}</a><span style={{'text-align': 'right'}} className="TransactionValuePositive"> (+{tx.value} BTC)</span></>)
+                                        }
+                                        else {
+                                            return (<><a className="noOverflow" style={{'text-align': 'left', 'font-weight': '300'}} href={'../address/' + tx.to}>{addr}</a><span style={{'text-align': 'right'}} className="TransactionValuePositive"> (+{tx.value} BTC)</span></>)
+                                        }
+                                    }
+                                })}
                             </div>
                         </div>  
                     </div>

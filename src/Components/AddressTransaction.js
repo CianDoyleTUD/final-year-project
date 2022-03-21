@@ -44,7 +44,7 @@ class AddressTransaction extends React.Component {
                     <span>{this.props.data.amount} BTC</span>
                     {this.state.transactionType}
                     <span>{this.state.date}</span>
-                    <span className='noOverflow'>{this.props.data.txid}</span>
+                    <a href={ 'http://localhost:3000/tr/' + this.props.data.txid } className='noOverflow'>{this.props.data.txid}</a>
                 </div>
             </div>
         )
