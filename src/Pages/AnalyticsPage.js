@@ -35,8 +35,6 @@ class AnalyticsPage extends React.Component {
             <><NavBar></NavBar>
             <div className="AnalyticsPage">
                 <div className="AnalyticsHeader">
-                    <h1>Welcome, {this.state.username}</h1>
-                    <button onClick={this.logOut} style={{ "color": "black" }}>Log out</button>
                 </div>
                 <TrackedWallets/>
             </div></>
