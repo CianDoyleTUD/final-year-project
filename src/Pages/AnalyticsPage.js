@@ -1,7 +1,6 @@
 import React from "react";
-import Analytics from "../Components/Analytics";
+import Graph from "../Components/Graph";
 import NavBar from "../Components/NavBar";
-import TrackedWallets from "../Components/TrackedWallets";
 
 class AnalyticsPage extends React.Component {
 
@@ -36,7 +35,9 @@ class AnalyticsPage extends React.Component {
             <div className="AnalyticsPage">
                 <div className="AnalyticsHeader">
                 </div>
-                <TrackedWallets/>
+                <div className="GraphContainer">
+                    <Graph></Graph>
+                </div>
             </div></>
         )
     }

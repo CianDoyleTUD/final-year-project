@@ -143,13 +143,20 @@ app.get("/api/tx/:id", (req, res) => {
 });
 
 app.get("/api/trackedwallets/:id", (req, res) => {
-
   var id = req.params.id;
-
-  console.log("Query called -> " + id);
-
   getTrackedWallets(id).then((result) => {  
+    if (!result) {
+      return res.sendStatus(404);
+    } 
+    else {
+      res.json(result)
+    }            
+  });
+});
 
+app.get("/api/notifications/:id", (req, res) => {
+  var id = req.params.id;
+  getNotifications(id).then((result) => {  
     if (!result) {
       console.log("No results found for query");
       return res.sendStatus(404);
@@ -158,7 +165,6 @@ app.get("/api/trackedwallets/:id", (req, res) => {
       console.log(result)
       res.json(result)
     }            
-
   });
 });
 
@@ -348,6 +354,18 @@ async function getTrackedWallets(username) {
     await client.connect();
     let blockchaindb = await client.db("blockchain");
     result = await blockchaindb.collection("tracked_wallets").findOne({"username": username});
+  }
+  finally {
+    return result;
+  }
+}
+
+async function getNotifications(username) {
+  let result;
+  try {
+    await client.connect();
+    let blockchaindb = await client.db("blockchain");
+    result = await blockchaindb.collection("notifications").findOne({"username": username});
   }
   finally {
     return result;

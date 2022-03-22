@@ -2,6 +2,7 @@ import Block from "../Components/Block";
 import React from 'react';
 import NavBar from "../Components/NavBar";
 import TrackedWallets from "../Components/TrackedWallets";
+import Notifications from "../Components/Notifications";
 
 class AccountPage extends React.Component{
 
@@ -28,6 +29,7 @@ class AccountPage extends React.Component{
                     <h1>Welcome, {this.state.username}</h1>
                 </div>
                 <TrackedWallets/>
+                <Notifications></Notifications>
             </div>
             </>
         );
