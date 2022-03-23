@@ -193,14 +193,13 @@ app.get("/api/price/:id", (req, res) => {
 
   var id = req.params.id;
 
-  if(id.startsWith('0') || id.startsWith('1') || id.startsWith('2') || id.startsWith('3')) {
+  if(id.startsWith('0') || id.startsWith('1') || id.startsWith('2') || id.startsWith('3') || id == 'historical') {
     getHistoricalPrice(id).then((result) => {  
       if (!result) {
         console.log("Price data not found");
       } 
       else {
-        console.log(result[0])
-        res.json(result[0])
+        res.json(result)
       }
     }); 
   }
@@ -212,11 +211,12 @@ app.get("/api/price/:id", (req, res) => {
 
 async function getHistoricalPrice(date) {
   let result;
+  let query = (date == 'historical') ? {} : {"date": date}
   try {
     await client.connect();
     let blockchaindb = await client.db("blockchain")
     console.log("Fetching price on " + date);
-    result = await blockchaindb.collection("historical_price_data").find({"date": date}).toArray();
+    result = await blockchaindb.collection("historical_price_data").find(query).sort({"timestamp_unix": 1}).toArray();
   } finally {
     return (result);
   }

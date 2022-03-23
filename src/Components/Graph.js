@@ -1,69 +1,75 @@
 import React, { PureComponent } from 'react';
-import { Area, LineChart, Line, XAxis, YAxis, CartesianAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, AreaChart } from 'recharts';
+import { Area, LineChart, Line, XAxis, YAxis, ReferenceArea, CartesianAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, AreaChart } from 'recharts';
 
-const data = [
-  {
-    date: '2022-03-15',
-    price: 4000,
-  },
-  {
-    date: '2022-03-16',
-    price: 3000,
-  },
-  {
-    date: '2022-03-17',
-    price: 2000,
-  },
-  {
-    date: '2022-03-18',
-    price: 2780,
-  },
-  {
-    date: '2022-03-19',
-    price: 1890,
-  },
-  {
-    date: '2022-03-20',
-    price: 2390,
-  },
-  {
-    date: '2022-03-21',
-    price: 3490,
-  },
-];
+const getAxisYDomain = (data, from, to, ref, offset) => {
+  const refData = data.filter(date => date.timestamp_unix >= from && date.timestamp_unix <= to)
+  let [bottom, top] = [refData[0]['price'], refData[0]['price']];
+  refData.forEach((date) => {
+    if (date[ref] > top) top = date['price'];
+    if (date[ref] < bottom) bottom = date['price'];
+  });
+  //console.log([(bottom | 0) - offset, (top | 0) + offset])
+  return [(bottom | 0), (top | 0) + offset];
+};
 
 export default class Graph extends PureComponent {
-  static demoUrl = 'https://codesandbox.io/s/simple-line-chart-kec3v';
+  
+  constructor(props) {
+    super(props);
+    this.state = { priceData: "", xLeft: "", xRight: "", yBottom: 0, yTop: "dataMax+5000", domainLeft: 1471788800, domainRight: "dataMax+1" }
+    this.zoom = this.zoom.bind(this);
+  }
+
+  componentDidMount() {
+    this.fetchHistoricalPriceData();
+  }
+
+  zoom() {
+    const [bottom, top] = getAxisYDomain(this.state.priceData, this.state.xLeft, this.state.xRight, 'price', 5000);
+    console.log("Top: " + top)
+    console.log("Bottom: " + bottom)
+
+    this.setState({domainLeft: this.state.xLeft, domainRight: this.state.xRight, yBottom: bottom, yTop: top}, () => {
+      console.log('yBottom', this.state.yBottom);
+      console.log('yTop', this.state.yTop);
+    })
+    this.setState({xLeft: "", xRight: ""})
+  }
+
+  fetchHistoricalPriceData() {
+    fetch("http://localhost:3001/api/price/historical")
+    .then(res => res.json())
+    .then(res => {
+      this.setState({priceData: res})
+    })
+  }
 
   render() {
+    if (!this.state.priceData) {
+      return (<div>Loading...</div>)
+    }
     return (
-      <>
         <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={data}>
-            <CartesianAxis x="date" />
-            <XAxis dataKey="date" stroke='white'/>
-            <YAxis dataKey="price" stroke='white' />
-            <Tooltip />
-            <Legend />
-            <Line type="step" dataKey="price" stroke="#0c0c0c" activeDot={{ r: 5 }} />
-            <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
-          </LineChart>
-        </ResponsiveContainer>
-        <ResponsiveContainer width="100%" height="100%">
-          <AreaChart data={data}>
+          <AreaChart data={this.state.priceData} 
+            onMouseDown={(e) => this.setState({xLeft: e.activeLabel})}
+            onMouseMove={(e) => this.state.xLeft && this.setState({xRight: e.activeLabel})}
+            onMouseUp={this.zoom}
+          >
           <defs>
             <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
               <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8}/>
               <stop offset="95%" stopColor="#8884d8" stopOpacity={0}/>
             </linearGradient>
           </defs>
-          <XAxis dataKey="date" stroke='white'/>
-          <YAxis dataKey="price" stroke='white' />
-          <Tooltip wrapperStyle={{ color : "#2c3e50", backgroundColor: 'red'}}/>
-          <Area type="monotone" dataKey="price" stroke="#8884d8" fillOpacity={0.5} fill="url(#colorUv)" />
-          
+          <XAxis xAxisId="1" allowDataOverflow type="number" dataKey="timestamp_unix" stroke='white' domain={[this.state.domainLeft, this.state.domainRight]}/>
+          <YAxis allowDataOverflow dataKey="price" type='number' stroke='white' domain={[this.state.yBottom, this.state.yTop]}/>
+          <Tooltip/>
+          <Area xAxisId="1" type="monotone" dataKey="price" stroke="#8884d8" fillOpacity={0.7} fill="url(#colorUv)" animationDuration={300} />
+          {this.state.xLeft && this.state.xRight ? (
+              <ReferenceArea xAxisId="1" x1={this.state.xLeft} x2={this.state.xRight} strokeOpacity={0.3} />
+            ) : null}
           </AreaChart>
-        </ResponsiveContainer></>
+        </ResponsiveContainer>
     );
   }
 }

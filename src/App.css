@@ -13,6 +13,10 @@ th {
   padding-top: 0.5em;
 }
 
+h1, p, span {
+  /* color: white; */
+}
+
 body {
   background-color: #34495e;
 }
@@ -617,5 +621,6 @@ a, a:visited {
 .GraphContainer {
   width: 80vw;
   height: 20vh;
+  min-height: 500px;
   margin: auto;
 }
