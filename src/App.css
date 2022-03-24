@@ -18,7 +18,8 @@ h1, p, span {
 }
 
 body {
-  background-color: #34495e;
+  /* background-color: #34495e; */
+  background-color:#353b48;
 }
 
 img {
@@ -623,4 +624,27 @@ a, a:visited {
   height: 20vh;
   min-height: 500px;
   margin: auto;
+}
+
+.chartButtonContainer {
+  /* background-color: #516f8f; */
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  margin-top: 20px;
+}
+
+.chartButtonTimeframes {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  width: 50%;
+}
+
+.chartButtonTimeframes > button {
+  width: 20%;
+}
+
+svg.recharts-surface {
+  overflow: visible;
 }

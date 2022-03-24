@@ -215,7 +215,6 @@ async function getHistoricalPrice(date) {
   try {
     await client.connect();
     let blockchaindb = await client.db("blockchain")
-    console.log("Fetching price on " + date);
     result = await blockchaindb.collection("historical_price_data").find(query).sort({"timestamp_unix": 1}).toArray();
   } finally {
     return (result);

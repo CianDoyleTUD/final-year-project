@@ -41,8 +41,8 @@ class AddressPage extends React.Component{
             .then(res => res.json())
             .then(res => {
                 this.setState({
-                    csvFile: this.state.csvFile + time + ",Received," + value + "," + (res['price'] * value).round(2) + "," + txid + "\n", 
-                    value: (res['price'] * this.state.balance).round(2)
+                    csvFile: this.state.csvFile + time + ",Received," + value + "," + (res[0]['price'] * value).round(2) + "," + txid + "\n", 
+                    value: (res[0]['price'] * this.state.balance).round(2)
                 })
             })
             total_received += value;
@@ -61,8 +61,8 @@ class AddressPage extends React.Component{
             .then(res => res.json())
             .then(res => {
                 this.setState({
-                    csvFile: this.state.csvFile + time + ",Spent," + value + "," + (res['price'] * value).round(2) + "," + txid + "\n", 
-                    value: (res['price'] * this.state.balance).round(2)
+                    csvFile: this.state.csvFile + time + ",Spent," + value + "," + (res[0]['price'] * value).round(2) + "," + txid + "\n", 
+                    value: (res[0]['price'] * this.state.balance).round(2)
                 })
             })
             total_spent += value;
@@ -84,7 +84,11 @@ class AddressPage extends React.Component{
         const query = UNIXToDate(timestamp)
         fetch("http://localhost:3001/api/price/" + query)
             .then(res => res.json())
-            .then(res => this.setState({value: (res['price'] * this.state.balance).round(2) }))
+            .then(res => {
+                this.setState({value: (res[0]['price'] * this.state.balance).round(2) })
+                console.log("price", res[0]['price'])
+            }
+            )
     }
 
     toggleDisplay(field) {
