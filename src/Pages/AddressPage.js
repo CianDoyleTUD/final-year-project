@@ -87,8 +87,7 @@ class AddressPage extends React.Component{
             .then(res => {
                 this.setState({value: (res[0]['price'] * this.state.balance).round(2) })
                 console.log("price", res[0]['price'])
-            }
-            )
+            })
     }
 
     toggleDisplay(field) {
@@ -118,8 +117,6 @@ class AddressPage extends React.Component{
     updateCSV() {
         this.setState({csvHref: 'data:text/csv;charset=utf-8,' + encodeURIComponent(this.state.csvFile)}); 
     }
-    
-
     
     render() {
         if (!this.state.transactions) {

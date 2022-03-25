@@ -17,17 +17,25 @@ export default class Graph extends PureComponent {
   
   constructor(props) {
     super(props);
-    this.state = { originalData: "", priceData: "", xLeft: "", xRight: "", yBottom: 0, yTop: "dataMax+5000", domainLeft: 1471788800, domainRight: "dataMax+1", lastTime: "", chartElement: <Area xAxisId="1" type="linear" dataKey="price" stroke="#00a8ff" fillOpacity={0.7} fill="url(#colorUv)" animationDuration={300} /> }
+    this.state = { originalData: "", priceData: "", csvFile: "", csvHref: "", xLeft: "", xRight: "", yBottom: 0, yTop: "dataMax+5000", domainLeft: 1471788800, domainRight: "dataMax+1", lastTime: "", chartElement: <Area xAxisId="1" type="linear" dataKey="price" stroke="#00a8ff" fillOpacity={0.7} fill="url(#colorUv)" animationDuration={300} /> }
     this.zoom = this.zoom.bind(this);
     this.setTimeframe = this.setTimeframe.bind(this);
     this.scrollZoom = this.scrollZoom.bind(this);
     this.resetZoom = this.resetZoom.bind(this);
     this.formatXAxis = this.formatXAxis.bind(this);
+    this.downloadData = this.downloadData.bind(this);
+    this.updateCSV = this.updateCSV.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }
 
   componentDidMount() {
     this.fetchHistoricalPriceData();
+  }
+
+  downloadData() {
+    this.setState({csvHref: 'data:text/csv;charset=utf-8,' + encodeURIComponent(this.state.csvFile)}, () => {
+      window.location.href = this.state.csvHref;
+    }); 
   }
 
   zoom() {
@@ -76,12 +84,23 @@ export default class Graph extends PureComponent {
     event.preventDefault()
   }
 
+  updateCSV(data) {
+    return this.state.csvFile + data['date'] + "," + data['price'] + "\n"
+  }
 
   fetchHistoricalPriceData() {
     fetch("http://localhost:3001/api/price/historical")
     .then(res => res.json())
     .then(res => {this.setState({priceData: res, originalData: res, lastTime: res[res.length - 1]['timestamp_unix']}, () => {
-      //console.log(this.state.priceData)
+      this.setState({csvFile: "date,price\n"}, async () => {
+        let csvString = "";
+        for(let i = 0; i < res.length; i++){
+          let csvLine = res[i]['date'] + "," + res[i]['price'] + "\n"
+          csvString += csvLine
+        } 
+        console.log(csvString)
+        this.setState({csvFile: this.state.csvFile + csvString})
+      })
     })})
   }
 
@@ -128,6 +147,7 @@ export default class Graph extends PureComponent {
           <button value={"1095"}onClick={(event) => this.setTimeframe(event)}>3 year</button>
           <button value={"all"} onClick={(event) => this.setTimeframe(event)}>All time</button>
         </div>
+        <button download="transaction_data.csv" onClick={this.downloadData}>Download raw data</button>
       </div>
       </>
     );
