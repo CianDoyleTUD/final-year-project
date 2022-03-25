@@ -2,22 +2,11 @@ import React, { PureComponent } from 'react';
 import { Area, LineChart, Label, Line, XAxis, YAxis, ReferenceArea, CartesianAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, AreaChart, ComposedChart } from 'recharts';
 import { UNIXToDate } from '../Utils/UtilFunctions';
 
-const getAxisYDomain = (data, from, to, ref, offset) => {
-  console.log(data)
-  const refData = data.filter(date => date.timestamp_unix >= from && date.timestamp_unix <= to)
-  let [bottom, top] = [refData[0]['price'], refData[0]['price']];
-  refData.forEach((date) => {
-    if (date[ref] > top) top = date['price'];
-    if (date[ref] < bottom) bottom = date['price'];
-  });
-  return [(bottom | 0), (top | 0) + offset];
-};
-
 export default class Graph extends PureComponent {
   
   constructor(props) {
     super(props);
-    this.state = { originalData: "", priceData: "", csvFile: "", csvHref: "", xLeft: "", xRight: "", yBottom: 0, yTop: "dataMax+5000", domainLeft: 1471788800, domainRight: "dataMax+1", lastTime: "", chartElement: <Area xAxisId="1" type="linear" dataKey="price" stroke="#00a8ff" fillOpacity={0.7} fill="url(#colorUv)" animationDuration={300} /> }
+    this.state = { originalData: "", priceData: "", csvFile: "", csvHref: "", scale: "linear", xLeft: "", xRight: "", yBottom: 0, yTop: "dataMax+1", domainLeft: 0, domainRight: "dataMax+1", lastTime: "", chartElement: <Area xAxisId="1" type="linear" dataKey="price" stroke="#00a8ff" fillOpacity={0.7} fill="url(#colorUv)" animationDuration={300} /> }
     this.zoom = this.zoom.bind(this);
     this.setTimeframe = this.setTimeframe.bind(this);
     this.scrollZoom = this.scrollZoom.bind(this);
@@ -29,63 +18,19 @@ export default class Graph extends PureComponent {
   }
 
   componentDidMount() {
-    this.fetchHistoricalPriceData();
-  }
-
-  downloadData() {
-    this.setState({csvHref: 'data:text/csv;charset=utf-8,' + encodeURIComponent(this.state.csvFile)}, () => {
-      window.location.href = this.state.csvHref;
-    }); 
-  }
-
-  zoom() {
-    const [bottom, top] = getAxisYDomain(this.state.priceData, this.state.xLeft, this.state.xRight, 'price', 2500);
-    this.setState({domainLeft: this.state.xLeft, domainRight: this.state.xRight, yBottom: bottom, yTop: top})
-    this.setState({xLeft: "", xRight: ""})
-  }
-
-  scrollZoom() {
-    console.log("Mousewheel fired")
-  }
-
-  resetZoom() {
-    this.setState({priceData: this.state.originalData}, () => {
-      this.setState({domainLeft: 1471788800, domainRight: "dataMax+1", yBottom: 0, yTop: "dataMax+5000"})
-      this.setState({xLeft: "", xRight: ""})
-    })
-  }         
-  
-  setTimeframe(event) {
-    const timeframe = (event.target.value == 'all') ? 346032000 : (event.target.value * 86400);
-    const slicedData = this.state.originalData.slice(-event.target.value); 
-    console.log(slicedData)
-    this.setState({priceData: slicedData}, () => {
-      const [bottom, top] = getAxisYDomain(this.state.priceData, this.state.lastTime - timeframe, this.state.lastTime, 'price', 2500);
-      this.setState({domainLeft: this.state.lastTime - timeframe, domainRight: "dataMax+1", yBottom: bottom, yTop: top})
-    })
-  }                    
-
-  formatXAxis (timestamp) {
-    return UNIXToDate(timestamp*1000)
-  }
-
-  handleChange(event) {
-    switch(event.target.value) {
-      case 'Area':
-        this.setState({chartElement: <Area xAxisId="1" type="linear" dataKey="price" stroke="#00a8ff" fillOpacity={0.7} fill="url(#colorUv)" animationDuration={300} /> })
+    switch(this.props.data.type) {
+      case 'price':
+        this.setState({domainLeft: 1301788800, dataStartPoint: 1301788800})
+        this.fetchHistoricalPriceData();
       break;
-      case 'linear':
-        this.setState({chartElement: <Line xAxisId="1" type="linear" dataKey="price" stroke="#00a8ff" dot={false} animationDuration={300} />})
+      case 'hash_rate':
+        this.setState({domainRight:1377688800, domainLeft: 1251788800, dataStartPoint: 1251788800, chartElement: <Area xAxisId="1" type="linear" dataKey="hash_rate" stroke="#00a8ff" fillOpacity={0.7} fill="url(#colorUv)" animationDuration={300} /> })
+        this.fetchHistoricalHashRate();
       break;
-      case 'basis':
-        this.setState({chartElement: <Area xAxisId="1" type="basisClosed" dataKey="price" stroke="#00a8ff" dot={false} fillOpacity={0.7} fill="url(#basisGradient)" animationDuration={300} />})
-      break;
-    }
-    event.preventDefault()
-  }
+      case 'transactions':
 
-  updateCSV(data) {
-    return this.state.csvFile + data['date'] + "," + data['price'] + "\n"
+      break;
+    }    
   }
 
   fetchHistoricalPriceData() {
@@ -98,19 +43,108 @@ export default class Graph extends PureComponent {
           let csvLine = res[i]['date'] + "," + res[i]['price'] + "\n"
           csvString += csvLine
         } 
-        console.log(csvString)
         this.setState({csvFile: this.state.csvFile + csvString})
       })
     })})
   }
 
+  fetchHistoricalHashRate() {
+    fetch("http://localhost:3001/api/stats/hash_rate")
+    .then(res => res.json())
+    .then(res => {this.setState({dataSet: res, originalDataSet: res, lastTime: res[res.length - 1]['timestamp_unix']}, () => {
+      const max = Math.max.apply(Math, res.map(function(data) { return data.hash_rate }))
+      this.setState({yTop: max})
+      this.setState({csvFile: "date,hashrate\n"}, async () => {
+        let csvString = "";
+        for(let i = 0; i < res.length; i++){
+          let csvLine = res[i]['date'] + "," + res[i]['hash_rate'] + "\n"
+          csvString += csvLine
+        } 
+        this.setState({csvFile: this.state.csvFile + csvString})
+      })
+    })})
+  }
+
+  getAxisYDomain = (data, from, to, ref, offset) => {
+    const refData = data.filter(date => date.timestamp_unix >= from && date.timestamp_unix <= to)
+    const type = this.props.data.type
+    const max = Math.max.apply(Math, refData.map(function(data) { return data[type] }))
+    const min = Math.min.apply(Math, refData.map(function(data) { return data[type] }))
+    return [(min | 0), (max | 0) + offset];
+  };
+  
+  downloadData() {
+    this.setState({csvHref: 'data:text/csv;charset=utf-8,' + encodeURIComponent(this.state.csvFile)}, () => {
+      window.location.href = this.state.csvHref;
+    }); 
+  }
+
+  zoom() {
+    const dataSet = (this.props.data.type == 'price') ? this.state.priceData : this.state.dataSet
+    const zoomLevel = (this.props.data.type == 'price') ? 1 : 1
+    const [bottom, top] = this.getAxisYDomain(dataSet, this.state.xLeft, this.state.xRight, this.props.data.type, zoomLevel);
+    this.setState({domainLeft: this.state.xLeft, domainRight: this.state.xRight, yBottom: bottom, yTop: top})
+    this.setState({xLeft: "", xRight: ""})
+  }
+
+  scrollZoom() {
+    console.log("Mousewheel fired")
+  }
+
+  resetZoom() {
+    this.setState({priceData: this.state.originalData}, () => {
+      this.setState({domainLeft: this.setState({domainLeft: this.state.dataStartPoint}), domainRight: "dataMax+1", yBottom: 0, yTop: "dataMax+1"})
+      this.setState({xLeft: "", xRight: ""})
+      if(!this.state.priceData) {
+        const type = this.props.data.type
+        const max = Math.max.apply(Math, this.state.dataSet.map(function(data) { return data[type] }))
+        this.setState({yTop: max})
+      }
+    })
+  }         
+  
+  setTimeframe(event) {
+    const timeframe = (event.target.value == 'all') ? 346032000 : (event.target.value * 86400);
+    const slicedData = this.state.originalData.slice(-event.target.value); 
+    this.setState({priceData: slicedData}, () => {
+      const [bottom, top] = this.getAxisYDomain(this.state.priceData, this.state.lastTime - timeframe, this.state.lastTime, 'price', 2500);
+      this.setState({domainLeft: this.state.lastTime - timeframe, domainRight: "dataMax+1", yBottom: bottom, yTop: top})
+    })
+  }                    
+
+  formatXAxis (timestamp) {
+    return UNIXToDate(timestamp*1000)
+  }
+
+  handleChange(event) {
+    switch(event.target.value) {
+      case 'Area':
+        this.setState({scale: "linear", chartElement: <Area xAxisId="1" type="linear" dataKey={this.props.data.type} stroke="#00a8ff" fillOpacity={0.7} fill="url(#colorUv)" animationDuration={300} /> })
+      break;
+      case 'linear':
+        this.setState({scale: "linear", chartElement: <Line xAxisId="1" type="linear" dataKey={this.props.data.type} stroke="#00a8ff" dot={false} animationDuration={300} />})
+      break;
+      case 'basis':
+        this.setState({scale: "linear", chartElement: <Area xAxisId="1" type="basisClosed" dataKey={this.props.data.type} stroke="#00a8ff" dot={false} fillOpacity={0.7} fill="url(#basisGradient)" animationDuration={300} />})
+      break;
+      case 'logarithmic':
+        this.setState({scale: "log", chartElement: <Line xAxisId="1" type="linear" dataKey={this.props.data.type} stroke="#00a8ff" dot={false} animationDuration={300} />})
+      break;
+    }
+    event.preventDefault()
+  }
+
+  updateCSV(data) {
+    return this.state.csvFile + data['date'] + "," + data[this.props.data.type] + "\n"
+  }
+
   render() {
-    if (!this.state.priceData) {
-      return (<div>Loading...</div>)
+    if (!this.state.csvFile) {
+        return (<div>Loading data</div>)
     }
     return (
         <><ResponsiveContainer width="100%" height="100%">
-        <ComposedChart data={this.state.priceData}
+        <ComposedChart data={this.state.priceData ? this.state.priceData : this.state.dataSet }
           onMouseDown={(e) => this.setState({ xLeft: e.activeLabel })}
           onMouseMove={(e) => this.state.xLeft && this.setState({ xRight: e.activeLabel })}
           onWheel={(e) => this.zoom}
@@ -125,7 +159,12 @@ export default class Graph extends PureComponent {
             </linearGradient>
           </defs>
           <XAxis label={<Label axisType='yAxis' position="bottom" stroke='#ffffff'>Price ($)</Label>} tickCount={10} tickFormatter={this.formatXAxis} xAxisId="1" allowDataOverflow type="number" dataKey="timestamp_unix" stroke='white' domain={[this.state.domainLeft, this.state.domainRight]} />
-          <YAxis label={<Label axisType='yAxis' angle={270} position='left' stroke='#ffffff'>Price ($)</Label>} tickCount={10} allowDataOverflow dataKey="price" type='number' stroke='white' domain={[this.state.yBottom, this.state.yTop]}/>
+          {
+            this.state.scale == 'linear' ?
+            <YAxis scale="linear" label={<Label axisType='yAxis' angle={270} position='left' stroke='#ffffff'>Price ($)</Label>} tickCount={10} allowDataOverflow dataKey={this.props.data.type} type='number' stroke='white' domain={[this.state.yBottom, this.state.yTop]}/>
+            :
+            <YAxis scale="log" label={<Label axisType='yAxis' angle={270} position='left' stroke='#ffffff'>Price ($)</Label>} tickCount={10} allowDataOverflow dataKey={this.props.data.type} type='number' stroke='white' domain={["auto", "auto"]}/>
+          }
           <Tooltip />
           {this.state.chartElement}
           {this.state.xLeft && this.state.xRight ? (
@@ -138,6 +177,7 @@ export default class Graph extends PureComponent {
           <option value="Area">Area chart</option>
           <option value="linear">Line chart</option>
           <option value="basis">Basis chart</option>
+          <option value="logarithmic">Log scale</option>
         </select>
         <button onClick={this.resetZoom}>Reset zoom</button>
         <div className='chartButtonTimeframes'>

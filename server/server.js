@@ -74,10 +74,11 @@ app.post("/removewallet", jsonParser, (req, res) => {
   });
 });
 
-app.get("/api/stats", (req, res) => {
+app.get("/api/stats/:id", (req, res) => {
 
-  console.log("Getting stats")
-  getStats().then((result) => {  
+  var id = req.params.id;
+
+  getStats(id).then((result) => {  
 
     if (!result) {
       console.log("No results found for query");
@@ -85,7 +86,7 @@ app.get("/api/stats", (req, res) => {
     } 
     else {
       console.log(result)
-      res.json(result[0])
+      res.json(result)
     }            
 
   });
@@ -221,6 +222,19 @@ async function getHistoricalPrice(date) {
   }
 }
 
+async function getStats(type) {
+  let result;
+  const limit = (type == 'today') ? 1 : 10000
+  try {
+    await client.connect();
+    let blockchaindb = await client.db("blockchain")
+    result = await blockchaindb.collection("stats").find({}).sort({"timestamp_unix": -1}).limit(limit).toArray();
+  } finally {
+    return result;
+  }
+}
+
+
 async function getAddressTransactions(address) {
   let result_to;
   let result_from;
@@ -270,17 +284,6 @@ async function getLatestBlocks() {
       "block_headers": block_headers,
       "block_full": block_full 
     };
-  }
-}
-
-async function getStats() {
-  let result;
-  try {
-    await client.connect();
-    let blockchaindb = await client.db("blockchain")
-    result = await blockchaindb.collection("stats").find({}).sort({"timestamp_unix": -1}).limit(1).toArray();
-  } finally {
-    return result;
   }
 }
 

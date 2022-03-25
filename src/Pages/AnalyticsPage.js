@@ -36,7 +36,8 @@ class AnalyticsPage extends React.Component {
                 <div className="AnalyticsHeader">
                 </div>
                 <div className="GraphContainer">
-                    <Graph></Graph>
+                    <Graph data={{type: 'price'}}></Graph>
+                    <Graph data={{type: 'hash_rate'}}></Graph>
                 </div>
             </div></>
         )

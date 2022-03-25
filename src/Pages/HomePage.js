@@ -26,18 +26,17 @@ class HomePage extends React.Component{
     };
 
     fetchHeaderStats() {
-        fetch("http://localhost:3001/api/stats")
+        fetch("http://localhost:3001/api/stats/today")
             .then(res => res.json())
             .then(res => {
                 console.log(res)
-                this.setState({ stats: res }) 
+                this.setState({ stats: res[0] }) 
             });
     }
 
     fetchCurrentPrice() {
         const today = new Date();
         const date = today.getFullYear() + "-" +  String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
-        console.log(date)
         fetch("http://localhost:3001/api/price/" + date)
             .then(res => res.json())
             .then(res => this.setState({price: res['price']}));
