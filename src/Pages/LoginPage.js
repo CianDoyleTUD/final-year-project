@@ -28,7 +28,7 @@ class LoginPage extends React.Component {
         }
         fetch("http://localhost:3001/login/", fetchData)
             .then(res => res.json())
-            .then(res => {
+            .then(res => {                   
                 if(res['validCredentials']) {
                     this.setState({validCredentials: true}) 
                     sessionStorage.setItem('username', this.state.username);
@@ -42,10 +42,7 @@ class LoginPage extends React.Component {
     };
 
     handleSubmit(event) {
-        this.sendLoginData().then(() => {
-            console.log("hii")
-            console.log(this.state.validCredentials)
-        });
+        this.sendLoginData();
         event.preventDefault()
     }
 
