@@ -14,7 +14,7 @@ class BlockPage extends React.Component{
     }
 
     fetchBlockData() {
-        let query =  window.location.pathname.substring(4);
+        let query =  window.location.pathname.substring(7);
         console.log(query) 
         fetch("http://localhost:3001/api/tx/" + query)
             .then(res => res.json())

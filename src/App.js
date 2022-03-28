@@ -16,7 +16,7 @@ function App() {
         <Route path="/" element={<HomePage/> }/>
         <Route path="/account" element={<AccountPage/> }/>
         <Route path="/tr/:tr" element={<TransactionPage/> }/>
-        <Route path="/tx/:tx" element={<BlockPage/> }/>
+        <Route path="/block/:block" element={<BlockPage/> }/>
         <Route path="/address/:addr" element={<AddressPage/> }/>
         <Route path="/login" element={<LoginPage/> }/>
         <Route path="/analytics" element={<AnalyticsPage/> }/>

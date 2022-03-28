@@ -15,7 +15,16 @@ class SearchBar extends React.Component{
   }
 
   handleSubmit(event) {
-    window.location = "http://localhost:3000/tx/" +  this.state.value;
+    const query = this.state.value;
+    if (query.startsWith('000')) { // Block
+      window.location = "http://localhost:3000/block/" +  this.state.value;
+    }
+    else if (query.startsWith(1) || query.startsWith(3) || query.startsWith("b")) { // Address
+      window.location = "http://localhost:3000/address/" +  this.state.value;
+    }
+    else { // Transaction
+      window.location = "http://localhost:3000/tr/" +  this.state.value;
+    }
     event.preventDefault();
   }
   

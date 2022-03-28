@@ -35,7 +35,7 @@ class LatestBlock extends React.Component {
         return (
             <tr className="LatestTableRow">
                 <td>
-                    <a href={ 'tx/' + this.props.data._id }>{this.props.data._id}</a>
+                    <a href={ 'block/' + this.props.data._id }>{this.props.data._id}</a>
                 </td>
                 <td>
                     <span>{this.props.data.height}</span>

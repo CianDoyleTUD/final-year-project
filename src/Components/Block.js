@@ -54,11 +54,11 @@ class Block extends React.Component {
                             </tr>
                             <tr>
                                 <td>Previous block hash</td>
-                                <td><Link onClick={this.forceUpdate} to={"/tx/" + this.props.blockdata.previousblockhash}>{this.props.blockdata.previousblockhash}</Link></td>
+                                <td><Link onClick={this.forceUpdate} to={"/block/" + this.props.blockdata.previousblockhash}>{this.props.blockdata.previousblockhash}</Link></td>
                             </tr>
                             <tr>
                                 <td>Next block hash</td>
-                                <td><Link onClick={this.forceUpdate} to={"/tx/" + this.props.blockdata.nextblockhash}>{this.props.blockdata.nextblockhash}</Link></td>
+                                <td><Link onClick={this.forceUpdate} to={"/block/" + this.props.blockdata.nextblockhash}>{this.props.blockdata.nextblockhash}</Link></td>
                             </tr>
                         </tbody>
                     </table>
