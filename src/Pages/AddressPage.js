@@ -156,16 +156,6 @@ class AddressPage extends React.Component{
                         <a onClick={this.updateCSV.bind(this)} className='downloadTransactionButton' href={this.state.csvHref} download="transaction_data.csv">Download full transaction data</a><p></p>
                         <span>Show received</span><input type="checkbox" defaultChecked={this.state.displayReceived} onChange={() => this.setState({displayReceived: !this.state.displayReceived})}/>
                         <span>Show spent</span><input type="checkbox" defaultChecked={this.state.displaySpent} onChange={() => this.setState({displaySpent: !this.state.displaySpent})}/>
-                        {/* {this.state.transactions["spent"].map((transaction, i) => {
-                            return (
-                                <AddressTransaction key={i} data={{ type: "Spent", amount: transaction.tx[0].inputs[0].value, timestamp: transaction.tx[0].time, txid: transaction.tx[0].txid }}></AddressTransaction>
-                            );
-                        })}
-                        {this.state.transactions["received"].map((transaction, i) => {
-                            return (
-                                <AddressTransaction key={i} data={{ type: "Received", amount:transaction.tx[0].outputs[0].value, timestamp: transaction.tx[0].time, txid: transaction.tx[0].txid }}></AddressTransaction>
-                            );
-                        })} */}
                         {this.state.txArray.map((transaction, i) => {
                             if(transaction['type'] == "Received") {
                                 if (this.state.displayReceived) {

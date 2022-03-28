@@ -13,7 +13,7 @@ class AddressTransaction extends React.Component {
         console.log("Converted dates")
         fetch("http://localhost:3001/api/price/" + this.state.date)
             .then(res => res.json())
-            .then(res => this.setState({value: Math.round((res['price'] * this.props.data.amount) * 100) / 100}))
+            .then(res => this.setState({value: Math.round((res[0]['price'] * this.props.data.amount))}    ))
             .then(() => {
                 if (this.props.data.type == 'Spent'){
                     this.setState({transactionType: <span className='TransactionValueNegative'>${this.state.value}</span>})

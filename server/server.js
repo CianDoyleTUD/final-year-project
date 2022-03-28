@@ -155,6 +155,17 @@ app.get("/api/trackedwallets/:id", (req, res) => {
   });
 });
 
+app.post("/marknotifications", jsonParser, (req, res) => {
+
+  const username = req.body.username 
+
+  markAsRead(username).then((result) => {
+    console.log(result)
+    res.json({notificationsMarked: true})
+  });
+});
+
+
 app.get("/api/notifications/:id", (req, res) => {
   var id = req.params.id;
   getNotifications(id).then((result) => {  
@@ -362,12 +373,12 @@ async function getTrackedWallets(username) {
   }
 }
 
-async function getNotifications(username) {
+async function markAsRead(username) {
   let result;
   try {
     await client.connect();
     let blockchaindb = await client.db("blockchain");
-    result = await blockchaindb.collection("notifications").findOne({"username": username});
+    result = await blockchaindb.collection("tracked_wallets").updateMany({"username": username, "notifications.read": false}, {'$set': { 'notifications.$.read': true}});
   }
   finally {
     return result;

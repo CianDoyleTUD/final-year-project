@@ -166,7 +166,7 @@ export default class Graph extends PureComponent {
   handleChange(event) {
     switch(event.target.value) {
       case 'Area':
-        this.setState({scale: "linear", chartElement: <Area xAxisId="1" type="linear" dataKey={this.props.data.type} stroke="#00a8ff" fillOpacity={0.7} fill="url(#colorUv)" animationDuration={300} /> })
+        this.setState({scale: "linear", chartElement: <Area xAxisId="1" type="linear" dataKey={this.props.data.type} stroke="#00a8ff" fillOpacity={0.7} fill="url(#colorUv)" animationDuration={300} tooltipItemColor="#82ca9d" /> })
       break;
       case 'linear':
         this.setState({scale: "linear", chartElement: <Line xAxisId="1" type="linear" dataKey={this.props.data.type} stroke="#00a8ff" dot={false} animationDuration={300} />})
@@ -191,11 +191,11 @@ export default class Graph extends PureComponent {
     }
     return (
       <div className='graphWrapper'>
-      <div className='graphTitle'>
-        <h1>{this.state.title}</h1>
-        <p>{this.state.description}</p>
-      </div>
-      <ResponsiveContainer width="100%" height="80%">
+        <div className='graphTitle'>
+          <h1>{this.state.title}</h1>
+          <p>{this.state.description}</p>
+        </div>
+        <ResponsiveContainer width="100%"  height="100%" minHeight={500}>
           <ComposedChart data={this.state.priceData ? this.state.priceData : this.state.dataSet}
             onMouseDown={(e) => this.setState({ xLeft: e.activeLabel })}
             onMouseMove={(e) => this.state.xLeft && this.setState({ xRight: e.activeLabel })}
@@ -221,7 +221,8 @@ export default class Graph extends PureComponent {
               <ReferenceArea xAxisId="1" x1={this.state.xLeft} x2={this.state.xRight} strokeOpacity={0.3} />
             ) : null}
           </ComposedChart>
-        </ResponsiveContainer><div className='chartButtonContainer'>
+        </ResponsiveContainer>
+        <div className='chartButtonContainer'>
           <select name="chart-type" value={this.state.chartType} onChange={this.handleChange}>
             <option value="Area">Area chart</option>
             <option value="linear">Line chart</option>
@@ -238,7 +239,7 @@ export default class Graph extends PureComponent {
           </div>
           <button download="transaction_data.csv" onClick={this.downloadData}>Download raw data</button>
         </div>
-        </div>
+      </div>
     );
   }
 }
