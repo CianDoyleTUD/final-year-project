@@ -380,12 +380,21 @@ a, a:visited {
 }
 
 .submitButtonContainer {
-  display: block;
+  display: flex;
+  flex-direction: column;
   height: 40%;
   background-color: #f0f1f3;
-  display: flex;
   align-items: center;
   margin-bottom: 1em;
+  justify-content: space-evenly;
+}
+
+.registerButton {
+  color: #3498db;
+}
+
+.registerButton:visited {
+  color: #3498db;
 }
 
 .loginInput {

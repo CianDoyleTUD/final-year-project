@@ -56,9 +56,9 @@
   },
   "config": {
     "pre-git": {
-      "commit-msg": "simple",
+      "commit-msg": "",
       "pre-commit": [],
-      "pre-push": ["npm test"],
+      "pre-push": ["npm run cy:run"],
       "post-commit": [],
       "post-checkout": [],
       "post-merge": []

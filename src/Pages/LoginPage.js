@@ -8,6 +8,7 @@ class LoginPage extends React.Component {
         this.state = {validCredentials: false, errorMessage: "", username: "", password: ""};
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.createAccount = this.createAccount.bind(this);
     }
 
     handleChange(event) {  
@@ -41,12 +42,43 @@ class LoginPage extends React.Component {
             );
     };
 
+    sendAccountData(data) {
+        const fetchData = {
+            method: "POST",
+            mode: 'cors',
+            headers: new Headers({
+                "Content-Type": "application/json"
+            }),
+            body: JSON.stringify({username: this.state.username, password: this.state.password})
+        }
+        fetch("http://localhost:3001/createaccount/", fetchData)
+            .then(res => res.json())
+            .then(res => {                   
+                if(res['status'] == "successful") {
+                    this.setState({validCredentials: true}) 
+                    sessionStorage.setItem('username', this.state.username);
+                    window.location = "http://localhost:3000/analytics";
+                }
+                else {
+                    this.setState({errorMessage: <p style={{"color": "red"}}>Username already exists!</p>}) 
+                }
+            }
+            );
+    };
+
     handleSubmit(event) {
         this.sendLoginData();
         event.preventDefault()
     }
 
-    componentDidMount() {
+    createAccount(event) {
+        event.preventDefault()
+        if(!this.state.password) {
+            this.setState({errorMessage: <p style={{"color": "red"}}>Password must be more than 4 characters!</p>}) 
+        }
+        else {
+            this.sendAccountData();
+        }
     }
 
     render() {
@@ -64,6 +96,7 @@ class LoginPage extends React.Component {
                         </div>
                         <div className="submitButtonContainer">
                             <button className="submitButton" type="button" onClick={this.handleSubmit}>Login</button>
+                            <a href='#' onClick={this.createAccount} className="registerButton">Create new account</a>
                         </div>
                     </form>
                 </div>

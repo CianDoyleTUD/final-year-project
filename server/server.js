@@ -28,7 +28,6 @@ checkServerStatus().catch(console.dir);
 
 app.post("/login", jsonParser, (req, res) => {
 
-  console.log("Logging in...")
   const [username, password] = [req.body.username, req.body.password]; 
 
   loginUser(username, password).then((result) => {
@@ -165,6 +164,30 @@ app.post("/marknotifications", jsonParser, (req, res) => {
   });
 });
 
+app.post("/createaccount", jsonParser, (req, res) => {
+
+  const [username, password] = [req.body.username, req.body.password]; 
+
+  console.log("Creating account")
+  loginUser(username).then((result) => {
+    if(!result) {
+      bcrypt.hash(password, 10, function(err, hash) {
+        createAccount(username, hash).then((result) => {
+          if(result) {
+            res.json({status: "successful", errorCode: "none"})
+          }
+          else {
+            res.json({status: "unsuccessful", errorCode: "creation"})
+          }
+        });    
+      });
+    }
+    else {
+      res.json({status: "unsuccessful", errorCode: "duplicate"})
+    }
+  })
+  
+});
 
 app.get("/api/notifications/:id", (req, res) => {
   var id = req.params.id;
@@ -385,19 +408,17 @@ async function markAsRead(username) {
   }
 }
 
-/*
-async function getLatestTransactions(count) {
+async function createAccount(username, password) {
   let result;
   try {
     await client.connect();
-    let blockchaindb = await client.db("blockchain")
-    console.log("Looking for latest " + count + " transactions");
-    result = await blockchaindb.collection("embedded_txs").find({"tx": 1}).limit(5).toArray();
-  } finally {
-    return (result);
+    let blockchaindb = await client.db("blockchain");
+    result = await blockchaindb.collection("user_info").insertOne({"username": username, "password": password});
+  }
+  finally {
+    return result;
   }
 }
-*/
 
 app.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);

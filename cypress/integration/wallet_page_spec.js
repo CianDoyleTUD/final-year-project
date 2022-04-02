@@ -33,11 +33,11 @@ describe('Tests wallet page functionality', () => {
     it('Download buttons work correctly', () => {
         cy.get('.downloadButton').should('be.visible').click()
         cy.task('downloads', 'cypress/downloads').then(after => {
-            expect(after.length).to.be.eq(1)  
+            cy.readFile("cypress/downloads/QRCode.svg").should("exist");
         })
         cy.get('.downloadTransactionButton').should('be.visible').click()
         cy.task('downloads', 'cypress/downloads').then(after => {
-            expect(after.length).to.be.eq(2)  
+            cy.readFile("cypress/downloads/transaction_data.csv").should("exist");
         })
     })
 })
