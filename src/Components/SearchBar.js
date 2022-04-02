@@ -20,13 +20,18 @@ class SearchBar extends React.Component{
       window.location = "http://localhost:3000/block/" +  this.state.value;
     }
     else if (query.startsWith(1) || query.startsWith(3) || query.startsWith("b")) { // Address
-      window.location = "http://localhost:3000/address/" +  this.state.value;
+      if (query.startsWith(1) && query.length > 36) {
+        window.location = "http://localhost:3000/tr/" +  this.state.value;
+      }
+      else {
+        window.location = "http://localhost:3000/address/" +  this.state.value;
+      }
     }
     else { // Transaction
       window.location = "http://localhost:3000/tr/" +  this.state.value;
     }
     event.preventDefault();
-  }
+  }	
   
   render()
   {

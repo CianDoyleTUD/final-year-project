@@ -10,10 +10,12 @@ class AddressTransaction extends React.Component {
     
     async fetchHistoricalPriceData() {
         await this.setState({date: UNIXToDate(this.props.data.timestamp)})
-        console.log("Converted dates")
         fetch("http://localhost:3001/api/price/" + this.state.date)
             .then(res => res.json())
-            .then(res => this.setState({value: Math.round((res[0]['price'] * this.props.data.amount))}    ))
+            .then(res => {  
+                console.log(res)
+                this.setState({value: Math.round((res[0]['price'] * this.props.data.amount))})
+            })
             .then(() => {
                 if (this.props.data.type == 'Spent'){
                     this.setState({transactionType: <span className='TransactionValueNegative'>${this.state.value}</span>})
@@ -33,7 +35,7 @@ class AddressTransaction extends React.Component {
     
     render() {
         return (
-            <div className="AddressTransaction">
+            <div type={this.props.data.type} className="AddressTransaction">
                 <div className='AddressTransactionHeader'>
                     <span>{this.state.typeSign}{this.props.data.type}</span>
                     <span>Value</span>

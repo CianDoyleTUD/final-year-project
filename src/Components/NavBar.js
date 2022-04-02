@@ -39,7 +39,7 @@ class NavBar extends React.Component {
         }
         else {
             this.setState({
-                loginButton: <button className="loginButton" onClick={this.openAccountPage}>Logged in as {username}</button>,
+                loginButton: <button className="loginButton">Logged in as {username}</button>,
                 accountButton:<a href='http://localhost:3000/account'>Account</a>,
                 signOutButton:<a href='#' onClick={this.logOut} style={{"color": "red"}}>Sign out</a>,
             })

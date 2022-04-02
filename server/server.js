@@ -185,7 +185,7 @@ app.get("/api/address/:id", (req, res) => {
   var id = req.params.id;
 
   if(id.startsWith('1') || id.startsWith('3') || id.startsWith('b')) {
-    getAddressTransactions("1517uEBW1DZCzYotyvhps2bFXTqt5WDSPT").then((result) => {  
+    getAddressTransactions(id).then((result) => {  
       if (!result) {
         console.log("No results found for wallet");
       } 
@@ -254,8 +254,8 @@ async function getAddressTransactions(address) {
   try {
     await client.connect();
     let blockchaindb = await client.db("blockchain")
-    result_to = await blockchaindb.collection("blocks").find({"tx.outputs.to": address}).project({ _id: 0, "tx.$": 1 }).sort({"tx.time": -1}).toArray();
-    result_from = await blockchaindb.collection("blocks").find({"tx.inputs.from": address}).project({ _id: 0, "tx.$": 1 }).sort({"tx.time": -1}).toArray();
+    result_to = await blockchaindb.collection("blocks_full").find({"tx.outputs.to": address}).project({ _id: 0, "tx.$": 1 }).sort({"tx.time": -1}).toArray();
+    result_from = await blockchaindb.collection("blocks_full").find({"tx.inputs.from": address}).project({ _id: 0, "tx.$": 1 }).sort({"tx.time": -1}).toArray();
     result = {
       "received": result_to,
       "spent": result_from
@@ -272,10 +272,10 @@ async function getBlockData(query, identifier) {
     let blockchaindb = await client.db("blockchain")
     console.log("Looking for " + identifier + " of " + query);
     if (identifier == 'height') {
-      result = await blockchaindb.collection("blocks").findOne({[identifier]:parseInt(query)});
+      result = await blockchaindb.collection("blocks_full").findOne({[identifier]:parseInt(query)});
     }
     else {
-      result = await blockchaindb.collection("blocks").findOne({[identifier]:query});
+      result = await blockchaindb.collection("blocks_full").findOne({[identifier]:query});
     }
   } finally {
     console.log(result)
@@ -288,7 +288,7 @@ async function getLatestBlocks() {
   try {
     await client.connect();
     let blockchaindb = await client.db("blockchain")
-    block_headers = await blockchaindb.collection("block_headers").find({}).sort({"_id" : -1}).limit(5).toArray();
+    block_headers = await blockchaindb.collection("blocks_full").find({}).sort({"_id" : -1}).limit(5).toArray();
     block_full = await blockchaindb.collection("blocks_full").find({}).sort({"_id" : -1}).limit(1).toArray();
   } finally {
     return {

@@ -35,7 +35,8 @@ class AddressPage extends React.Component{
 
             const txid = this.state.transactions["received"][i].tx[0].txid;
             const value = this.state.transactions["received"][i].tx[0].outputs[0].value;
-            const time = UNIXToDate(this.state.transactions["received"][i].tx[0].time)
+            const time = UNIXToDate(this.state.transactions["received"][i].tx[0].time * 1000) 
+            console.log(time)
 
             fetch("http://localhost:3001/api/price/" + time)
             .then(res => res.json())
@@ -60,6 +61,9 @@ class AddressPage extends React.Component{
             fetch("http://localhost:3001/api/price/" + time)
             .then(res => res.json())
             .then(res => {
+                if(!res) {
+                    console.log("Error")
+                }
                 this.setState({
                     csvFile: this.state.csvFile + time + ",Spent," + value + "," + (res[0]['price'] * value).round(2) + "," + txid + "\n", 
                     value: (res[0]['price'] * this.state.balance).round(2)
@@ -86,13 +90,11 @@ class AddressPage extends React.Component{
             .then(res => res.json())
             .then(res => {
                 this.setState({value: (res[0]['price'] * this.state.balance).round(2) })
-                console.log("price", res[0]['price'])
             })
     }
 
     toggleDisplay(field) {
         this.setState({field: !field})
-        console.log(field)
         //this.setState(this.state);
     }
 
@@ -160,14 +162,14 @@ class AddressPage extends React.Component{
                             if(transaction['type'] == "Received") {
                                 if (this.state.displayReceived) {
                                     return (
-                                        <AddressTransaction key={i} data={{ type: transaction['type'], amount: transaction.data.outputs[0].value, timestamp: transaction.data.time, txid: transaction.data.txid }}></AddressTransaction>
+                                        <AddressTransaction key={i} data={{ type: transaction['type'], amount: transaction.data.outputs[0].value, timestamp: transaction.data.time*1000, txid: transaction.data.txid }}></AddressTransaction>
                                     );
                                 }
                             }
                             else {
                                 if (this.state.displaySpent) {
                                     return (
-                                        <AddressTransaction key={i} data={{ type: transaction['type'], amount: transaction.data.inputs[0].value, timestamp: transaction.data.time, txid: transaction.data.txid }}></AddressTransaction>
+                                        <AddressTransaction key={i} data={{ type: transaction['type'], amount: transaction.data.inputs[0].value, timestamp: transaction.data.time*1000, txid: transaction.data.txid }}></AddressTransaction>
                                     );
                                 }
                             }

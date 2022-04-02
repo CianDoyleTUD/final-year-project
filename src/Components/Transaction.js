@@ -12,10 +12,13 @@ class Transaction extends React.Component {
             this.getBlockReward();
 
             const username = sessionStorage.getItem('username');
-            if(username != "") {
+            if(username && username != "") {
                 fetch("http://localhost:3001/api/trackedwallets/" + username)
                     .then(res => res.json())
                     .then(res => this.setState({trackedWallets: res['tracked_wallets'], fetched: true}))
+            }
+            else {
+                this.setState({fetched: true})
             }
     }
 
