@@ -64,9 +64,9 @@ class HomePage extends React.Component{
                         <div className="LatestBlocks">
                             <table style={{width: "100%"}}className="LatestBlockTable">
                                 <thead>
-                                    <th style={{width: "60%"}}>Block hash</th>
-                                    <th style={{width: "20%"}}>Block height</th>
-                                    <th style={{width: "20%"}}>Mined</th>
+                                    <th className='latestTableHeader' style={{width: "60%"}}>Block hash</th>
+                                    <th className='latestTableHeader' style={{width: "20%"}}>Block height</th>
+                                    <th className='latestTableHeader' style={{width: "20%"}}>Mined</th>
                                 </thead>
                                 <tbody>
                                     {this.state.blocks['block_headers'].map((transaction, i) => <LatestBlock key={i} data={transaction}/>)} 
@@ -76,8 +76,8 @@ class HomePage extends React.Component{
                         <div className="LatestBlocks">
                             <table style={{width: "100%"}}className="LatestBlockTable">
                                 <thead>
-                                    <th style={{width: "60%"}}>Transaction hash</th>
-                                    <th style={{width: "40%"}}>Time</th>
+                                    <th className='latestTableHeader' style={{width: "60%"}}>Transaction hash</th>
+                                    <th className='latestTableHeader' style={{width: "40%"}}>Time</th>
                                 </thead>
                                 <tbody>
                                     {this.state.blocks['block_full'][0]['tx'].slice(0, 5).map((transaction, i) => {

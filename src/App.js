@@ -8,6 +8,7 @@ import LoginPage from './Pages/LoginPage.js';
 import AnalyticsPage from './Pages/AnalyticsPage'
 import TransactionPage from './Pages/TransactionPage';
 import AccountPage from './Pages/AccountPage';
+import CalculatorPage from './Pages/CalculatorPage';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path="/address/:addr" element={<AddressPage/> }/>
         <Route path="/login" element={<LoginPage/> }/>
         <Route path="/analytics" element={<AnalyticsPage/> }/>
+        <Route path="/calculator" element={<CalculatorPage/> }/>
       </Routes>
     </div>
   );

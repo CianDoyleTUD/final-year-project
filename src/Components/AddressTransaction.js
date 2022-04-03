@@ -30,7 +30,6 @@ class AddressTransaction extends React.Component {
 
     componentDidMount() {
         this.fetchHistoricalPriceData();
-        //console.log(this.props.data)
     }
     
     render() {
