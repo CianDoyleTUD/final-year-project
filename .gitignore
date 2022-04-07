@@ -23,8 +23,7 @@ yarn-debug.log*
 yarn-error.log*
 
 cfg.json
-upload.py
-/py
+/py/update.py
 /cypress/videos
 /cypress/downloads
 /cypress/screenshots
