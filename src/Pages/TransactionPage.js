@@ -32,14 +32,17 @@ class TransactionPage extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = { txid: "" }
+        this.state = { tx: "" }
     }
 
-    fetchBlockData() {
+    async fetchBlockData() {
         let query =  window.location.pathname.substring(4);
-        this.setState({txid: query})
-        console.log(query)
-    };
+        fetch("http://localhost:3001/api/tx/" + query)
+            .then(res => res.json())
+            .then(res => {
+                this.setState({ tx: res[0]['tx'][0] });
+            }) //  this.setState({ block: res })
+    }
 
     componentDidMount() {
         this.fetchBlockData()
@@ -48,7 +51,7 @@ class TransactionPage extends React.Component {
 
 
     render() {
-        if (!this.state.txid) {
+        if (!this.state.tx) {
             return <div />
         }
         return (
@@ -56,7 +59,7 @@ class TransactionPage extends React.Component {
             <SearchBar></SearchBar>
             <div className="TransactionPage">
                 <div className="TransactionContainer">
-                    <Transaction data={sampleData}/>
+                    <Transaction data={this.state.tx}/>
                 </div>
             </div></>
         )

@@ -142,6 +142,22 @@ app.get("/api/block/:id", (req, res) => {
   });
 });
 
+app.get("/api/tx/:id", (req, res) => {
+
+  var id = req.params.id;
+
+  getTransactionData(id).then((result) => {  
+    if (!result) {
+      console.log("No results found for query");
+      return res.sendStatus(404);
+    } 
+    else {
+      console.log("Returned result");
+      res.json(result)
+    }
+  });
+});
+
 app.get("/api/trackedwallets/:id", (req, res) => {
   var id = req.params.id;
   getTrackedWallets(id).then((result) => {  
@@ -293,6 +309,18 @@ async function getAddressTransactions(address) {
       "spent": result_from
     }
   } finally {
+    return (result);
+  }
+}
+
+async function getTransactionData(query) {
+  let result;
+  try {
+    await client.connect();
+    let blockchaindb = await client.db("blockchain")
+    result = await blockchaindb.collection("blocks_full").find({"tx.txid": query}).project({ _id: 0, "tx.$": 1 }).limit(1).toArray();
+  } finally {
+    console.log(result)
     return (result);
   }
 }

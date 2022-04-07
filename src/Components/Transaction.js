@@ -8,6 +8,7 @@ class Transaction extends React.Component {
     }
 
     componentDidMount() {
+        console.log(this.props.data)
         if(!this.props.data.inputs)
             this.getBlockReward();
 
@@ -64,7 +65,7 @@ class Transaction extends React.Component {
             return (
                 <div className="Transaction">
                     <div className="TransactionID">
-                        <a>{this.props.data.txid}</a>
+                        <a href={ 'http://localhost:3000/tr/' + this.props.data.txid }>{this.props.data.txid}</a>
                     </div>
                     <div className="TransactionData">
                         <div className="TransactionInputs">
