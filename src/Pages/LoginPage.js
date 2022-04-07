@@ -33,7 +33,7 @@ class LoginPage extends React.Component {
                 if(res['validCredentials']) {
                     this.setState({validCredentials: true}) 
                     sessionStorage.setItem('username', this.state.username);
-                    window.location = "http://localhost:3000/analytics";
+                    window.location = "http://localhost:3000/metrics";
                 }
                 else {
                     this.setState({errorMessage: <p style={{"color": "red"}}>Invalid login credentials</p>}) 
@@ -57,7 +57,7 @@ class LoginPage extends React.Component {
                 if(res['status'] == "successful") {
                     this.setState({validCredentials: true}) 
                     sessionStorage.setItem('username', this.state.username);
-                    window.location = "http://localhost:3000/analytics";
+                    window.location = "http://localhost:3000/metrics";
                 }
                 else {
                     this.setState({errorMessage: <p style={{"color": "red"}}>Username already exists!</p>}) 

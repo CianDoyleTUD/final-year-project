@@ -29,7 +29,6 @@ class HomePage extends React.Component{
         fetch("http://localhost:3001/api/stats/today")
             .then(res => res.json())
             .then(res => {
-                console.log(res)
                 this.setState({ stats: res[0] }) 
             });
     }
@@ -37,9 +36,14 @@ class HomePage extends React.Component{
     fetchCurrentPrice() {
         const today = new Date();
         const date = today.getFullYear() + "-" +  String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
-        fetch("http://localhost:3001/api/price/" + date)
+        fetch("http://localhost:3001/api/price/today")
             .then(res => res.json())
-            .then(res => this.setState({price: res[0]['price']}));
+            .then(res =>  {
+                console.log(res)
+                if (res) {
+                    this.setState({price: res[0]['price']})
+                }
+            });
     }
 
     render() {

@@ -27,3 +27,4 @@ upload.py
 /py
 /cypress/videos
 /cypress/downloads
+/cypress/screenshots

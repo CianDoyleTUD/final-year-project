@@ -6,7 +6,7 @@ describe('Tests chart page functionality', () => {
     })
   
     it('Chart page should ask for login details before viewing charts', () => {
-        cy.visit('http://localhost:3000/analytics')
+        cy.visit('http://localhost:3000/metrics')
         cy.get('.LoginContainer').should('be.visible')
         cy.get('input[type=text]').type("admin")
         cy.get('input[type=password]').type("admin")
@@ -20,13 +20,13 @@ describe('Tests chart page functionality', () => {
             .its("sessionStorage")
             .invoke("getItem", "username")
             .should("exist");
-        cy.visit('http://localhost:3000/analytics')
+        cy.visit('http://localhost:3000/metrics')
         cy.get('.recharts-surface').should('be.visible')
         cy.get('.recharts-layer.recharts-area').should('be.visible')
     })
 
     it('Chart zoom buttons function correctly', () => {
-        cy.visit('http://localhost:3000/analytics')
+        cy.visit('http://localhost:3000/metrics')
         cy.get('button[value=30]').click()
         cy.get('.recharts-layer.recharts-area').should('be.visible')
         cy.get('.chartButtonContainer > button').first().click()
@@ -35,7 +35,7 @@ describe('Tests chart page functionality', () => {
     })
     
     it('Chart can be changed to log scale', () => {
-        cy.visit('http://localhost:3000/analytics')
+        cy.visit('http://localhost:3000/metrics')
         cy.get('select').first().select('logarithmic')
         cy.get('.recharts-layer.recharts-line').should('be.visible')
     })
