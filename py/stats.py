@@ -102,10 +102,6 @@ def upload_hash_rates(time_from, time_to):
 
 def get_hash_rate(period_hours, time_from):
 
-    #time_from = 1377760020
-    #time_now = time.time()
-    blocks_expected = period_hours * 6 # Block expected every 10 mins
-
     results = database["blocks_full"].find({ "time": {"$gte": time_from , "$lte": time_from + (period_hours * 3600)} }, {"_id": 0, "difficulty": 1, "time": 1}).sort("time", -1)
 
     block_list = list(results)

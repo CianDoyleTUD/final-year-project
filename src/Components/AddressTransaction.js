@@ -13,7 +13,6 @@ class AddressTransaction extends React.Component {
         fetch("http://localhost:3001/api/price/" + this.state.date)
             .then(res => res.json())
             .then(res => {  
-                console.log(res)
                 this.setState({value: Math.round((res[0]['price'] * this.props.data.amount))})
             })
             .then(() => {

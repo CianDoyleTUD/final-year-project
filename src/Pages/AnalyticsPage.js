@@ -17,10 +17,6 @@ class AnalyticsPage extends React.Component {
         this.setState({username: ""})
     }
 
-    fetchTrackedWallet() {
-
-    }
-
     componentDidMount() {
         const username = sessionStorage.getItem('username');
         this.setState({username: username})

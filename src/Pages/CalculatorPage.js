@@ -28,15 +28,15 @@ class CalculatorPage extends React.Component {
     }
 
     async fetchData() {
-        fetch("http://localhost:3001/api/price/" + "2013-01-01")
+        fetch("http://localhost:3001/api/price/today")
         .then(res => res.json())
         .then(res => this.setState({currentPrice: res[0]['price']}))
 
-        fetch("http://localhost:3001/api/stats/" + "2013-01-01") //TODO: REPLACE DATE WITH 'today' 'STRING
+        fetch("http://localhost:3001/api/stats/today") 
         .then(res => res.json())
         .then(res => this.setState({networkHashRate: res[3200]['hash_rate']}))
 
-        fetch("http://localhost:3001/api/price/" + "2013-01-01")
+        fetch("http://localhost:3001/api/price/today")
         .then(res => res.json())
         .then(res => this.setState({currentPrice: res[0]['price']}))
     }

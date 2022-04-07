@@ -20,7 +20,7 @@ function App() {
         <Route path="/block/:block" element={<BlockPage/> }/>
         <Route path="/address/:addr" element={<AddressPage/> }/>
         <Route path="/login" element={<LoginPage/> }/>
-        <Route path="/analytics" element={<AnalyticsPage/> }/>
+        <Route path="/metrics" element={<AnalyticsPage/> }/>
         <Route path="/calculator" element={<CalculatorPage/> }/>
       </Routes>
     </div>

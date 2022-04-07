@@ -39,7 +39,7 @@ class HomePage extends React.Component{
         const date = today.getFullYear() + "-" +  String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
         fetch("http://localhost:3001/api/price/" + date)
             .then(res => res.json())
-            .then(res => this.setState({price: res['price']}));
+            .then(res => this.setState({price: res[0]['price']}));
     }
 
     render() {

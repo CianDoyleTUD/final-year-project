@@ -36,7 +36,6 @@ class AddressPage extends React.Component{
             const txid = this.state.transactions["received"][i].tx[0].txid;
             const value = this.state.transactions["received"][i].tx[0].outputs[0].value;
             const time = UNIXToDate(this.state.transactions["received"][i].tx[0].time * 1000) 
-            console.log(time)
 
             fetch("http://localhost:3001/api/price/" + time)
             .then(res => res.json())
@@ -56,7 +55,7 @@ class AddressPage extends React.Component{
 
             const txid = this.state.transactions["spent"][i].tx[0].txid;
             const value = this.state.transactions["spent"][i].tx[0].inputs[0].value;
-            const time = UNIXToDate(this.state.transactions["spent"][i].tx[0].time)
+            const time = UNIXToDate(this.state.transactions["spent"][i].tx[0].time * 1000)
 
             fetch("http://localhost:3001/api/price/" + time)
             .then(res => res.json())
@@ -182,15 +181,3 @@ class AddressPage extends React.Component{
     }
 }
 export default AddressPage;
-
-
-
-
-
- // TODO: GET THE CORRECT INPUT/OUTPUT IN CASES WHERE MULTIPLE I/Os
-    // TODO: GET VALUE IN CSV
-
-     // https://stackoverflow.com/questions/11832914/how-to-round-to-at-most-2-decimal-places-if-necessary
-
-         // Downloads QRCode as png https://stackoverflow.com/questions/23218174/how-do-i-save-export-an-svg-file-after-creating-an-svg-with-d3-js-ie-safari-an
-// https://stackoverflow.com/questions/17564103/using-javascript-to-download-file

@@ -56,9 +56,14 @@ class NavBar extends React.Component {
                                 Home
                             </li>
                         </Link>
-                        <Link to="/analytics">
+                        <Link to="/metrics">
                             <li>
-                                Analytics
+                                Metrics
+                            </li>
+                        </Link>
+                        <Link to="/calculator">
+                            <li>
+                                Tools
                             </li>
                         </Link>
                         <div className="loginButtonContainer">

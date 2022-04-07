@@ -6,7 +6,7 @@ class BlockPage extends React.Component{
 
     constructor(props) {
         super(props);
-        this.state = { apiResponse: "" }
+        this.state = { blockData: "" }
     }
     
     componentDidMount() {
@@ -16,16 +16,16 @@ class BlockPage extends React.Component{
     fetchBlockData() {
         let query =  window.location.pathname.substring(7);
         console.log(query) 
-        fetch("http://localhost:3001/api/tx/" + query)
+        fetch("http://localhost:3001/api/block/" + query)
             .then(res => res.json())
-            .then(res => this.setState({ apiResponse: res }));
+            .then(res => this.setState({ blockData: res }));
     };
 
     render() {
         return (
             <>
             <NavBar /><div className="BlockPage">
-                <Block blockdata={this.state.apiResponse} />
+                <Block blockdata={this.state.blockData} />
             </div></>
         );
     }
