@@ -2,7 +2,7 @@
 
 The project is a **Bitcoin block explorer**, which is a web application that enables the user to search for real-time and historical information about the Bitcoin blockchain, including data related to blocks, transactions, addresses, and more. Block explorers make valuable blockchain data - which would otherwise only be available to a select few with programming skills and hardware capable of hosting a bitcoin node - accessible to anyone with an internet connection, while offering additional utility to casual or professional users of Bitcoin.
 
-The application was built using **React** for the frontend, with a** Node + Express** backend and** MongoDB database**. Automated **python** scripts are responsible for processing and maintaining the data from the blockchain, and calculating useful metrics such as the **network hash rate**, which can be used to determine mining profitability.
+The application was built using **React** for the frontend, with a **Node + Express** backend and ** MongoDB database**. Automated **python** scripts are responsible for processing and maintaining the data from the blockchain, and calculating useful metrics such as the **network hash rate**, which can be used to determine mining profitability.
 
 The transaction data is processed before it can be presented to the end user, because of how unspent transaction outputs (UTXOs) work. Auxilliary data such as the price of bitcoin is also pulled from external APIs to enhance some features of the application.
 
